@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سكرين ميديا | تصميم، طباعة، إنتاج وتسويق للمطاعم والكافيهات</title>
+<meta name="description" content="سكرين ميديا — حلول متكاملة للمطاعم والكافيهات والمحلات التجارية: هوية بصرية، طباعة وتغليف، لوحات، إنتاج إعلامي، تسويق وفعاليات. من الفكرة إلى يوم الافتتاح.">
+<meta property="og:title" content="سكرين ميديا | من الشاشة إلى الشارع">
+<meta property="og:description" content="حلول متكاملة للمطاعم والكافيهات والمحلات التجارية — من الفكرة إلى التنفيذ والتشغيل.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_SA">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0A0A'/%3E%3Cpath d='M24 18 48 32 24 46Z' fill='%23F2951F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SCREEN MEDIA — brand tokens (from brand/palette.css)
+   ============================================================ */
+:root{
+  --sm-orange:        #F2951F;
+  --sm-orange-light:  #FBBC6D;
+  --sm-orange-deep:   #B5762A;
+  --sm-blue:          #4A90C0;
+  --sm-navy:          #244D87;
+  --sm-steel:         #9CBED7;
+  --sm-cyan:          #B1EDFD;
+  --sm-white:         #F0F0F0;
+  --sm-black:         #0A0A0A;
+
+  /* derived */
+  --bg:          var(--sm-black);
+  --panel:       #10151B;
+  --panel-2:     #0C1015;
+  --line:        rgba(156,190,215,.14);
+  --line-strong: rgba(156,190,215,.28);
+  --txt:         var(--sm-white);
+  --muted:       rgba(240,240,240,.68);
+  --steel-txt:   rgba(156,190,215,.85);
+
+  --font-display: "Changa", "IBM Plex Sans Arabic", sans-serif;
+  --font-body:    "IBM Plex Sans Arabic", "Changa", sans-serif;
+  --font-mono:    "IBM Plex Mono", "IBM Plex Sans Arabic", monospace;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --header-h: 72px;
+  --container: 1160px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 16px);color-scheme:dark}
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:var(--font-body);
+  font-size:1rem;
+  line-height:1.85;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(242,149,31,.35);color:var(--sm-white)}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--sm-orange);outline-offset:3px;border-radius:4px}
+
+.container{max-width:var(--container);margin-inline:auto;padding-inline:24px}
+.mono{font-family:var(--font-mono)}
+
+/* ============================================================
+   Scrubber — video-style scroll progress (brand signature)
+   ============================================================ */
+.scrubber{
+  position:fixed;inset-inline-start:0;top:0;height:3px;width:100%;
+  z-index:120;pointer-events:none;
+  background:rgba(156,190,215,.12);
+}
+.scrubber i{
+  display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--sm-orange-deep),var(--sm-orange) 60%,var(--sm-orange-light));
+  box-shadow:0 0 12px rgba(242,149,31,.55);
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header{
+  position:fixed;top:0;inset-inline:0;z-index:100;
+  height:var(--header-h);
+  background:rgba(10,10,10,.72);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  height:100%;display:flex;align-items:center;gap:2rem;
+}
+.brand{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.brand-mark{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(145deg,var(--sm-orange-light),var(--sm-orange) 55%,var(--sm-orange-deep));
+  display:grid;place-items:center;
+  box-shadow:0 0 18px rgba(242,149,31,.35);
+}
+.brand-mark svg{width:15px;height:15px}
+.brand-name{
+  font-family:var(--font-display);font-weight:700;font-size:1.06rem;
+  letter-spacing:.06em;line-height:1;color:var(--sm-white);white-space:nowrap;
+}
+.brand-name b{color:var(--sm-steel);font-weight:700}
+
+.nav-links{display:flex;align-items:center;gap:1.9rem;margin-inline-start:auto}
+.nav-links a{
+  font-size:.95rem;font-weight:500;color:var(--muted);
+  transition:color .2s var(--ease);
+}
+.nav-links a:hover{color:var(--sm-cyan)}
+
+.nav-actions{display:flex;align-items:center;gap:.9rem}
+.lang-toggle{
+  font-family:var(--font-mono);font-size:.8rem;font-weight:600;
+  border:1px solid var(--line-strong);border-radius:8px;
+  padding:.42em .85em;color:var(--sm-steel);
+  transition:all .2s var(--ease);letter-spacing:.04em;
+}
+/* letter-spacing breaks connected Arabic script — only track Latin */
+body.en .lang-toggle{letter-spacing:0} /* shows "عربي" in EN mode */
+.lang-toggle:hover{border-color:var(--sm-cyan);color:var(--sm-cyan)}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6em;
+  font-family:var(--font-body);font-weight:700;font-size:.98rem;
+  padding:.8em 1.7em;border-radius:var(--radius-sm);
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),border-color .22s var(--ease),background .22s var(--ease);
+  white-space:nowrap;
+}
+.btn svg{width:1.1em;height:1.1em;flex-shrink:0}
+.btn-primary{
+  background:linear-gradient(180deg,var(--sm-orange) 0%,#E38A15 100%);
+  color:#141008;
+  box-shadow:0 4px 20px rgba(242,149,31,.25);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(242,149,31,.4)}
+.btn-ghost{
+  border:1px solid var(--line-strong);color:var(--sm-white);
+}
+.btn-ghost:hover{border-color:var(--sm-steel);transform:translateY(-2px);background:rgba(156,190,215,.06)}
+.btn-outline-orange{
+  border:1px solid rgba(242,149,31,.5);color:var(--sm-orange);
+}
+.btn-outline-orange:hover{background:rgba(242,149,31,.1);transform:translateY(-2px)}
+.nav-cta{padding:.6em 1.3em;font-size:.9rem}
+
+/* burger */
+.burger{display:none;width:42px;height:42px;position:relative;z-index:110}
+.burger span{
+  display:block;width:20px;height:2px;background:var(--sm-white);
+  margin:4.5px auto;border-radius:2px;transition:all .3s var(--ease);
+}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ============================================================
+   Hero — the title card
+   ============================================================ */
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
+  padding-top:calc(var(--header-h) + 3rem);
+  padding-bottom:4.5rem;
+  text-align:center;
+  overflow:clip;
+}
+/* layered backdrop: navy glow + faint grid + giant play triangle */
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(52% 42% at 50% 8%,rgba(36,77,135,.4),transparent 70%),
+    radial-gradient(40% 34% at 50% 58%,rgba(242,149,31,.09),transparent 70%);
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:
+    linear-gradient(rgba(156,190,215,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(156,190,215,.05) 1px,transparent 1px);
+  background-size:52px 52px;
+  -webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
+  mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
+}
+.hero-tri{
+  position:absolute;top:50%;left:50%;
+  width:min(58vh,560px);height:min(58vh,560px);
+  transform:translate(-50%,-52%);
+  pointer-events:none;
+  filter:drop-shadow(0 0 46px rgba(242,149,31,.18));
+  animation:heroFloat 9s ease-in-out infinite;
+}
+@keyframes heroFloat{
+  0%,100%{transform:translate(-50%,-52%)}
+  50%{transform:translate(-50%,-55%)}
+}
+.hero-inner{position:relative;z-index:2;max-width:900px}
+
+.kicker{
+  font-family:var(--font-mono);font-size:.82rem;font-weight:500;
+  color:var(--sm-cyan);
+  display:inline-flex;align-items:center;gap:.7em;
+}
+body.en .kicker{letter-spacing:.06em}
+.kicker::before{
+  content:"";width:9px;height:10px;flex-shrink:0;
+  clip-path:polygon(0 0,0 100%,100% 50%);
+  background:var(--sm-orange);
+}
+.hero h1{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2.5rem,7vw,4.9rem);
+  line-height:1.32;
+  margin-block:1.1rem .9rem;
+  text-wrap:balance;
+}
+.hl-screen{
+  background:linear-gradient(120deg,var(--sm-cyan),var(--sm-blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hl-street{
+  background:linear-gradient(120deg,var(--sm-orange-light),var(--sm-orange) 70%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero .lead{
+  color:var(--muted);font-size:clamp(1.02rem,1.5vw,1.2rem);
+  max-width:46em;margin-inline:auto;
+}
+.cta-row{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-top:2.2rem;
+}
+
+/* stats — timecode readouts */
+.stats{
+  display:flex;justify-content:center;gap:clamp(1.6rem,5vw,4.2rem);
+  margin-top:3.4rem;
+}
+.stat{min-width:0}
+.stat-num{
+  font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.2;
+  color:var(--sm-white);
+}
+.stat-num small{font-size:.6em;color:var(--sm-orange);font-weight:600}
+.stat-label{font-size:.86rem;color:var(--steel-txt);margin-top:.15rem}
+
+/* live timecode */
+.tc{
+  margin-top:3rem;
+  display:inline-flex;align-items:center;gap:.8em;
+  font-family:var(--font-mono);font-size:.78rem;color:rgba(177,237,253,.6);
+  letter-spacing:.06em;
+}
+.tc [data-ar]{letter-spacing:0}
+body.en .tc [data-ar]{letter-spacing:.06em}
+.tc-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--sm-orange);
+  box-shadow:0 0 10px rgba(242,149,31,.8);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ============================================================
+   Ticker — "now showing" services marquee
+   ============================================================ */
+.ticker{
+  border-block:1px solid var(--line);
+  background:var(--panel-2);
+  overflow:hidden;position:relative;
+}
+.ticker-track{
+  display:inline-flex;align-items:center;gap:2.6rem;
+  padding-block:.95rem;padding-inline-start:2.6rem;
+  white-space:nowrap;
+  animation:ticker 46s linear infinite;
+  will-change:transform;
+}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  display:inline-flex;align-items:center;gap:2.6rem;
+  font-size:.92rem;font-weight:500;color:var(--steel-txt);
+}
+.ticker-item::after{
+  content:"";width:8px;height:9px;
+  clip-path:polygon(0 0,0 100%,100% 50%);
+  background:var(--sm-orange);opacity:.8;
+}
+
+/* ============================================================
+   Sections — shared
+   ============================================================ */
+.section{padding-block:clamp(4.2rem,9vw,7rem)}
+.section-head{max-width:640px;margin-bottom:clamp(2.4rem,5vw,3.6rem)}
+.section-head h2{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(1.75rem,3.6vw,2.6rem);line-height:1.4;
+  margin-block:.5rem .6rem;text-wrap:balance;
+}
+.section-head .sub{color:var(--muted);font-size:1.02rem}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* ============================================================
+   Services
+   ============================================================ */
+.services{background:linear-gradient(180deg,transparent,rgba(16,21,27,.5) 20%,rgba(16,21,27,.5) 80%,transparent)}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:1.8rem 1.7rem 1.6rem;
+  transition:transform .28s var(--ease),border-color .28s var(--ease),box-shadow .28s var(--ease);
+}
+.card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(242,149,31,.45);
+  box-shadow:0 18px 44px rgba(0,0,0,.45);
+}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.15rem}
+.card-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:rgba(36,77,135,.28);
+  border:1px solid rgba(74,144,192,.28);
+  display:grid;place-items:center;
+  color:var(--sm-steel);
+  transition:color .28s var(--ease),border-color .28s var(--ease),background .28s var(--ease);
+}
+.card-icon svg{width:24px;height:24px}
+.card:hover .card-icon{color:var(--sm-orange);border-color:rgba(242,149,31,.4);background:rgba(242,149,31,.08)}
+.card-idx{font-family:var(--font-mono);font-size:.78rem;color:rgba(156,190,215,.5);font-weight:500}
+.card h3{
+  font-family:var(--font-display);font-weight:700;font-size:1.22rem;
+  line-height:1.5;margin-bottom:.55rem;
+}
+.card ul{display:grid;gap:.45rem}
+.card li{
+  display:flex;align-items:baseline;gap:.6em;
+  font-size:.93rem;color:var(--muted);line-height:1.7;
+}
+.card li::before{
+  content:"";width:7px;height:8px;flex-shrink:0;
+  clip-path:polygon(0 0,0 100%,100% 50%);
+  background:var(--sm-orange);opacity:.85;
+  position:relative;top:-1px;
+}
+
+/* featured packages card */
+.card-featured{
+  grid-column:1 / -1;
+  display:flex;align-items:center;gap:2.4rem;flex-wrap:wrap;
+  background:
+    radial-gradient(60% 120% at 85% 50%,rgba(242,149,31,.12),transparent 60%),
+    linear-gradient(135deg,rgba(36,77,135,.38),var(--panel) 55%);
+  border-color:rgba(242,149,31,.32);
+  padding:2.2rem 2.1rem;
+}
+.card-featured:hover{border-color:rgba(242,149,31,.6)}
+.card-featured .cf-body{flex:1 1 420px}
+.card-featured h3{font-size:1.5rem}
+.card-featured p{color:var(--muted);font-size:.97rem;margin-bottom:1rem;max-width:52em}
+.cf-chips{display:flex;flex-wrap:wrap;gap:.55rem}
+.cf-chips span{
+  display:inline-flex;align-items:center;gap:.5em;
+  font-size:.86rem;font-weight:500;color:var(--sm-white);
+  background:rgba(10,10,10,.5);
+  border:1px solid var(--line);
+  border-radius:999px;padding:.38em 1em;
+}
+.cf-chips span::before{
+  content:"";width:6px;height:7px;
+  clip-path:polygon(0 0,0 100%,100% 50%);
+  background:var(--sm-orange);
+}
+.cf-cta{flex-shrink:0}
+
+/* ============================================================
+   Process — from idea to operation
+   ============================================================ */
+.steps{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem;
+  counter-reset:step;
+}
+.step{position:relative;padding-top:1.6rem}
+.step::before{
+  content:"";position:absolute;top:0;inset-inline-start:0;width:100%;height:1px;
+  background:var(--line);
+}
+.step::after{
+  content:"";position:absolute;top:-4.5px;inset-inline-start:0;
+  width:9px;height:10px;
+  clip-path:polygon(0 0,0 100%,100% 50%);
+  background:var(--sm-orange);
+  box-shadow:0 0 10px rgba(242,149,31,.5);
+}
+[dir="rtl"] .step::after{transform:scaleX(-1)}
+.step-idx{
+  font-family:var(--font-mono);font-size:.8rem;font-weight:600;
+  color:var(--sm-cyan);letter-spacing:.08em;
+}
+.step h3{
+  font-family:var(--font-display);font-weight:700;font-size:1.18rem;
+  line-height:1.5;margin-block:.4rem .35rem;
+}
+.step p{font-size:.93rem;color:var(--muted)}
+
+/* ============================================================
+   Opening package — the formula
+   ============================================================ */
+.package-panel{
+  position:relative;overflow:clip;
+  background:
+    radial-gradient(50% 90% at 50% -20%,rgba(36,77,135,.45),transparent 70%),
+    var(--panel);
+  border:1px solid var(--line-strong);
+  border-radius:calc(var(--radius) + 8px);
+  padding:clamp(2.6rem,6vw,4.2rem) clamp(1.4rem,4vw,3.5rem);
+  text-align:center;
+}
+.package-panel .section-head{margin-inline:auto;margin-bottom:2.6rem}
+.badge{
+  display:inline-flex;align-items:center;gap:.55em;
+  font-family:var(--font-mono);font-size:.78rem;font-weight:600;
+  color:var(--sm-orange);
+  border:1px solid rgba(242,149,31,.4);border-radius:999px;
+  padding:.35em 1em;background:rgba(242,149,31,.07);
+}
+body.en .badge{letter-spacing:.06em}
+.badge::before{content:"";width:7px;height:8px;clip-path:polygon(0 0,0 100%,100% 50%);background:var(--sm-orange)}
+
+.formula{
+  display:flex;align-items:stretch;justify-content:center;
+  flex-wrap:wrap;gap:.9rem;
+  margin-bottom:2.1rem;
+}
+.f-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:1.25rem 1.5rem;min-width:128px;
+  transition:border-color .25s var(--ease),transform .25s var(--ease);
+}
+.f-item:hover{border-color:var(--sm-blue);transform:translateY(-3px)}
+.f-item svg{width:28px;height:28px;color:var(--sm-steel)}
+.f-item span{font-weight:600;font-size:.94rem}
+.f-op{
+  align-self:center;
+  font-family:var(--font-mono);font-size:1.5rem;font-weight:600;
+  color:var(--sm-blue);
+}
+.f-result{
+  background:linear-gradient(160deg,var(--sm-orange),var(--sm-orange-deep));
+  border-color:transparent;
+  color:#141008;
+  box-shadow:0 10px 34px rgba(242,149,31,.3);
+}
+.f-result svg{color:#141008}
+.f-result span{font-weight:700}
+.f-result:hover{border-color:transparent;box-shadow:0 14px 40px rgba(242,149,31,.42)}
+.package-note{color:var(--steel-txt);font-size:.94rem;margin-bottom:2rem}
+
+/* ============================================================
+   Why us
+   ============================================================ */
+.aud-chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}
+.aud-chips span{
+  font-size:.88rem;font-weight:600;color:var(--sm-cyan);
+  border:1px solid rgba(74,144,192,.4);border-radius:999px;
+  padding:.35em 1.1em;background:rgba(36,77,135,.18);
+}
+.why-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem;
+}
+.why{
+  border-top:1px solid var(--line-strong);
+  padding-top:1.2rem;
+}
+.why h3{
+  font-family:var(--font-display);font-weight:700;font-size:1.08rem;
+  line-height:1.5;margin-bottom:.35rem;color:var(--sm-white);
+}
+.why h3 b{color:var(--sm-orange);font-weight:700}
+.why p{font-size:.92rem;color:var(--muted)}
+
+/* ============================================================
+   Final CTA
+   ============================================================ */
+.cta-panel{
+  position:relative;overflow:clip;text-align:center;
+  background:
+    radial-gradient(55% 100% at 50% 115%,rgba(242,149,31,.2),transparent 65%),
+    radial-gradient(60% 90% at 50% -25%,rgba(36,77,135,.5),transparent 70%),
+    var(--panel-2);
+  border:1px solid rgba(242,149,31,.3);
+  border-radius:calc(var(--radius) + 8px);
+  padding:clamp(3rem,7vw,5rem) clamp(1.4rem,4vw,3rem);
+}
+.cta-panel::before{
+  content:"";position:absolute;top:50%;left:50%;
+  width:340px;height:340px;transform:translate(-50%,-50%);
+  clip-path:polygon(20% 8%,86% 50%,20% 92%);
+  background:rgba(242,149,31,.05);
+  pointer-events:none;
+}
+.cta-panel h2{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(2rem,5vw,3.2rem);line-height:1.35;
+  margin-bottom:.6rem;position:relative;
+}
+.cta-panel p{color:var(--muted);max-width:38em;margin-inline:auto;position:relative}
+.cta-panel .cta-row{position:relative}
+.cta-small{
+  margin-top:1.6rem;font-family:var(--font-mono);font-size:.78rem;
+  color:rgba(177,237,253,.55);position:relative;
+}
+body.en .cta-small{letter-spacing:.05em}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer{border-top:1px solid var(--line);margin-top:clamp(4rem,8vw,6rem)}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2.5rem;
+  padding-block:3.2rem;
+}
+.footer-brand p{color:var(--muted);font-size:.94rem;max-width:34em;margin-top:1rem}
+.socials{display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.4rem}
+.socials a{
+  font-family:var(--font-mono);font-size:.82rem;color:var(--steel-txt);
+  transition:color .2s var(--ease);letter-spacing:.03em;
+}
+.socials a:hover{color:var(--sm-orange)}
+.footer-col h4{
+  font-family:var(--font-display);font-weight:700;font-size:1rem;
+  margin-bottom:1rem;color:var(--sm-white);
+}
+.footer-col ul{display:grid;gap:.55rem}
+.footer-col a,.footer-col li{font-size:.92rem;color:var(--muted)}
+.footer-col a:hover{color:var(--sm-cyan)}
+.contact-line{display:flex;align-items:center;gap:.6em}
+.contact-line svg{width:15px;height:15px;color:var(--sm-orange);flex-shrink:0}
+.contact-line a[dir="ltr"]{unicode-bidi:embed}
+.footer-bottom{
+  border-top:1px solid var(--line);
+  padding-block:1.3rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+.footer-bottom p{font-size:.82rem;color:rgba(240,240,240,.45)}
+.footer-bottom .mono{font-size:.75rem;color:rgba(156,190,215,.4);letter-spacing:.05em}
+
+/* ============================================================
+   WhatsApp FAB
+   ============================================================ */
+.wa-fab{
+  position:fixed;bottom:22px;inset-inline-end:22px;z-index:90;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;
+  display:grid;place-items:center;
+  box-shadow:0 8px 28px rgba(37,211,102,.4);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+}
+.wa-fab svg{width:28px;height:28px;fill:#fff}
+.wa-fab:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 14px 36px rgba(37,211,102,.55)}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width:1080px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:repeat(2,1fr);row-gap:2rem}
+  .steps{grid-template-columns:repeat(2,1fr);row-gap:2.2rem}
+}
+@media (max-width:760px){
+  .nav-links{
+    position:fixed;top:var(--header-h);inset-inline:0;
+    flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(10,13,17,.97);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+    padding:.6rem 24px 1.4rem;
+    opacity:0;transform:translateY(-10px);pointer-events:none;
+    transition:opacity .28s var(--ease),transform .28s var(--ease);
+  }
+  .nav-links.open{opacity:1;transform:none;pointer-events:auto}
+  .nav-links a{padding:.85rem 4px;border-bottom:1px solid rgba(156,190,215,.08);font-size:1.02rem}
+  .nav-links a:last-child{border-bottom:none}
+  .burger{display:block}
+  .nav-cta{display:none}
+  .grid{grid-template-columns:1fr}
+  .card-featured{padding:1.8rem 1.5rem}
+  .steps{grid-template-columns:1fr;gap:0}
+  .step{
+    padding-top:0;padding-inline-start:1.7rem;padding-bottom:2rem;
+  }
+  .step::before{width:1px;height:100%;top:4px}
+  .step:last-child{padding-bottom:0}
+  .step:last-child::before{display:none}
+  .step::after{top:2px}
+  .formula{flex-direction:column;align-items:stretch}
+  .f-item{flex-direction:row;justify-content:flex-start;padding:1rem 1.3rem}
+  .f-op{padding-block:.1rem}
+  .footer-grid{grid-template-columns:1fr;gap:2.2rem}
+  .stats{gap:1.4rem}
+  .stat-label{font-size:.78rem}
+  .hero{padding-top:calc(var(--header-h) + 2rem)}
+  .cta-row .btn{flex:1 1 auto}
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero-tri{animation:none}
+  .tc-dot{animation:none}
+  .ticker{overflow-x:auto}
+  .ticker-track{animation:none}
+  .rv{opacity:1;transform:none;transition:none}
+  .btn,.card,.f-item,.wa-fab{transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- video-style scroll scrubber -->
+<div class="scrubber" aria-hidden="true"><i id="scrubber-bar"></i></div>
+
+<!-- ============================ HEADER ============================ -->
+<header class="site-header">
+  <div class="container nav">
+    <a href="#top" class="brand" aria-label="Screen Media">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5 21 12 6 20.5Z" fill="#141008"/></svg>
+      </span>
+      <span class="brand-name">SCREEN <b>MEDIA</b></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a>
+      <a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a>
+      <a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a>
+      <a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a>
+      <a href="#contact" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">EN</button>
+      <a class="btn btn-primary nav-cta" data-wa href="#contact">
+        <span data-ar="اطلب عرض سعر" data-en="Get a quote">اطلب عرض سعر</span>
+      </a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <svg class="hero-tri" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <linearGradient id="triG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#9CBED7"/>
+          <stop offset=".5" stop-color="#4A90C0"/>
+          <stop offset="1" stop-color="#244D87"/>
+        </linearGradient>
+      </defs>
+      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+    </svg>
+
+    <div class="container hero-inner">
+      <p class="kicker" data-ar="للمطاعم · الكافيهات · المحلات التجارية" data-en="FOR RESTAURANTS · CAFÉS · RETAIL STORES">للمطاعم · الكافيهات · المحلات التجارية</p>
+
+      <h1>
+        <span data-ar="نأخذ مشروعك من " data-en="Your brand, from the ">نأخذ مشروعك من </span><span class="hl-screen" data-ar="الشاشة" data-en="screen">الشاشة</span><span data-ar=" إلى " data-en=" to the "> إلى </span><span class="hl-street" data-ar="الشارع" data-en="street">الشارع</span>
+      </h1>
+
+      <p class="lead" data-ar="سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح." data-en="Screen Media is one team that gets your restaurant, café or store fully ready: identity &amp; design, printing &amp; packaging, signage, media production, marketing and events — from the first idea to opening day.">سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح.</p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" data-wa href="#contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          <span data-ar="اطلب عرض سعر" data-en="Get a quote">اطلب عرض سعر</span>
+        </a>
+        <a class="btn btn-ghost" href="#services">
+          <span data-ar="استكشف خدماتنا" data-en="Explore services">استكشف خدماتنا</span>
+        </a>
+      </div>
+
+      <!-- EDIT: عدّل الأرقام هنا / edit your real numbers here (data-target) -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num" dir="ltr"><span class="count" data-target="250">0</span><small>+</small></div>
+          <div class="stat-label" data-ar="مشروع منفّذ" data-en="Projects delivered">مشروع منفّذ</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" dir="ltr"><span class="count" data-target="120">0</span><small>+</small></div>
+          <div class="stat-label" data-ar="عميل" data-en="Clients">عميل</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" dir="ltr"><span class="count" data-target="8">0</span><small>+</small></div>
+          <div class="stat-label" data-ar="سنوات خبرة" data-en="Years of experience">سنوات خبرة</div>
+        </div>
+      </div>
+
+      <div class="tc" dir="ltr">
+        <span class="tc-dot"></span>
+        <span id="tc-time">00:00:00</span>
+        <span>/</span>
+        <span data-ar="من الفكرة إلى الافتتاح" data-en="IDEA → OPENING DAY">من الفكرة إلى الافتتاح</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TICKER ============================ -->
+  <div class="ticker" dir="ltr" aria-hidden="true">
+    <div class="ticker-track" id="ticker-track">
+      <span class="ticker-item" data-ar="تصميم لوقو" data-en="Logo design">تصميم لوقو</span>
+      <span class="ticker-item" data-ar="هوية بصرية" data-en="Brand identity">هوية بصرية</span>
+      <span class="ticker-item" data-ar="تصميم منيو" data-en="Menu design">تصميم منيو</span>
+      <span class="ticker-item" data-ar="بوكسات مطاعم" data-en="Restaurant boxes">بوكسات مطاعم</span>
+      <span class="ticker-item" data-ar="أكواب كافيهات" data-en="Café cups">أكواب كافيهات</span>
+      <span class="ticker-item" data-ar="استيكرات" data-en="Stickers">استيكرات</span>
+      <span class="ticker-item" data-ar="لوحات مضيئة" data-en="Illuminated signs">لوحات مضيئة</span>
+      <span class="ticker-item" data-ar="واجهات زجاجية" data-en="Glass storefronts">واجهات زجاجية</span>
+      <span class="ticker-item" data-ar="بنرات" data-en="Banners">بنرات</span>
+      <span class="ticker-item" data-ar="تصوير فيديو" data-en="Video shoots">تصوير فيديو</span>
+      <span class="ticker-item" data-ar="تصوير منتجات" data-en="Product photography">تصوير منتجات</span>
+      <span class="ticker-item" data-ar="مونتاج" data-en="Editing">مونتاج</span>
+      <span class="ticker-item" data-ar="سوشيال ميديا" data-en="Social media">سوشيال ميديا</span>
+      <span class="ticker-item" data-ar="حملات ممولة" data-en="Paid campaigns">حملات ممولة</span>
+      <span class="ticker-item" data-ar="فعاليات" data-en="Events">فعاليات</span>
+      <span class="ticker-item" data-ar="Food Station" data-en="Food stations">Food Station</span>
+    </div>
+  </div>
+
+  <!-- ============================ SERVICES ============================ -->
+  <section class="section services" id="services">
+    <div class="container">
+      <div class="section-head rv">
+        <p class="kicker" data-ar="خدماتنا" data-en="OUR SERVICES">خدماتنا</p>
+        <h2 data-ar="كل شيء تحت سقف واحد" data-en="Everything under one roof">كل شيء تحت سقف واحد</h2>
+        <p class="sub" data-ar="سبعة مجالات تغطي رحلة مشروعك كاملة — من اللوقو الأول إلى يوم الافتتاح." data-en="Seven service lines that cover your project end to end — from the first logo to opening day.">سبعة مجالات تغطي رحلة مشروعك كاملة — من اللوقو الأول إلى يوم الافتتاح.</p>
+      </div>
+
+      <div class="grid">
+        <!-- 01 التصميم والهوية -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19c2.5-8 13.5-8 16 0"/>
+                <rect x="2.6" y="17.6" width="2.8" height="2.8"/>
+                <rect x="18.6" y="17.6" width="2.8" height="2.8"/>
+                <circle cx="12" cy="7" r="1.6"/>
+                <path d="M12 8.6V13" stroke-dasharray="2 2.4"/>
+              </svg>
+            </span>
+            <span class="card-idx">01</span>
+          </div>
+          <h3 data-ar="التصميم والهوية البصرية" data-en="Design &amp; Brand Identity">التصميم والهوية البصرية</h3>
+          <ul>
+            <li data-ar="تصميم لوقو احترافي" data-en="Professional logo design">تصميم لوقو احترافي</li>
+            <li data-ar="بناء الهوية البصرية الكاملة" data-en="Full visual identity systems">بناء الهوية البصرية الكاملة</li>
+            <li data-ar="تصميم المنيو" data-en="Menu design">تصميم المنيو</li>
+            <li data-ar="تصميم البوكسات والتغليف" data-en="Box &amp; packaging design">تصميم البوكسات والتغليف</li>
+          </ul>
+        </article>
+
+        <!-- 02 الطباعة والتغليف -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3 20 7v10l-8 4-8-4V7l8-4Z"/>
+                <path d="M4 7l8 4 8-4"/>
+                <path d="M12 11v10"/>
+              </svg>
+            </span>
+            <span class="card-idx">02</span>
+          </div>
+          <h3 data-ar="الطباعة والتغليف" data-en="Printing &amp; Packaging">الطباعة والتغليف</h3>
+          <ul>
+            <li data-ar="طباعة بوكسات المطاعم" data-en="Restaurant box printing">طباعة بوكسات المطاعم</li>
+            <li data-ar="طباعة أكواب الكافيهات" data-en="Café cup printing">طباعة أكواب الكافيهات</li>
+            <li data-ar="استيكرات وشعارات" data-en="Stickers &amp; labels">استيكرات وشعارات</li>
+            <li data-ar="جميع احتياجات التغليف" data-en="Every packaging need">جميع احتياجات التغليف</li>
+          </ul>
+        </article>
+
+        <!-- 03 اللوحات -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 4h18"/>
+                <path d="M12 4v3"/>
+                <rect x="5" y="7" width="14" height="9" rx="1.5"/>
+                <path d="M8.5 11.5h7"/>
+              </svg>
+            </span>
+            <span class="card-idx">03</span>
+          </div>
+          <h3 data-ar="اللوحات والإعلانات الخارجية" data-en="Signage &amp; Outdoor Ads">اللوحات والإعلانات الخارجية</h3>
+          <ul>
+            <li data-ar="لوحات محلات مضيئة وعادية" data-en="Illuminated &amp; standard shop signs">لوحات محلات مضيئة وعادية</li>
+            <li data-ar="استيكر واجهات زجاجية" data-en="Glass storefront stickers">استيكر واجهات زجاجية</li>
+            <li data-ar="بنرات ولوحات إعلانية" data-en="Banners &amp; ad boards">بنرات ولوحات إعلانية</li>
+          </ul>
+        </article>
+
+        <!-- 04 الإنتاج الإعلامي -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="9" width="18" height="11" rx="2"/>
+                <path d="M4 9 5.6 4.9a1.5 1.5 0 0 1 1.9-.9l12 3.1a1.5 1.5 0 0 1 1.05 1.85L20.2 9"/>
+                <path d="M8.6 4.9 7.6 8.2"/>
+                <path d="M13 6 12 9"/>
+                <path d="M17.2 7.1 16.4 9"/>
+                <path d="M10.5 12.3v4.4l3.8-2.2Z"/>
+              </svg>
+            </span>
+            <span class="card-idx">04</span>
+          </div>
+          <h3 data-ar="الإنتاج الإعلامي" data-en="Media Production">الإنتاج الإعلامي</h3>
+          <ul>
+            <li data-ar="تصوير فيديو للمطاعم والكافيهات" data-en="Video shoots for restaurants &amp; cafés">تصوير فيديو للمطاعم والكافيهات</li>
+            <li data-ar="تصوير منتجات" data-en="Product photography">تصوير منتجات</li>
+            <li data-ar="مونتاج احترافي للإعلانات" data-en="Professional ad editing">مونتاج احترافي للإعلانات</li>
+          </ul>
+        </article>
+
+        <!-- 05 التسويق -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.8v2.4A1.8 1.8 0 0 0 4.8 15H6l5.5 3.5v-13L6 9H4.8A1.8 1.8 0 0 0 3 10.8Z"/>
+                <path d="M15 9.3a3.8 3.8 0 0 1 0 5.4"/>
+                <path d="M17.6 6.8a7.4 7.4 0 0 1 0 10.4"/>
+              </svg>
+            </span>
+            <span class="card-idx">05</span>
+          </div>
+          <h3 data-ar="إدارة الحسابات والتسويق" data-en="Social &amp; Marketing">إدارة الحسابات والتسويق</h3>
+          <ul>
+            <li data-ar="إدارة حسابات السوشيال ميديا" data-en="Social media management">إدارة حسابات السوشيال ميديا</li>
+            <li data-ar="إنشاء محتوى تسويقي" data-en="Marketing content creation">إنشاء محتوى تسويقي</li>
+            <li data-ar="حملات إعلانية مدفوعة" data-en="Paid ad campaigns">حملات إعلانية مدفوعة</li>
+          </ul>
+        </article>
+
+        <!-- 06 الفعاليات -->
+        <article class="card rv">
+          <div class="card-top">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 16a7 7 0 0 1 14 0"/>
+                <circle cx="12" cy="7.2" r="1.1"/>
+                <path d="M4 16h16"/>
+                <path d="M3 19.5h18"/>
+              </svg>
+            </span>
+            <span class="card-idx">06</span>
+          </div>
+          <h3 data-ar="تنظيم الفعاليات" data-en="Events &amp; Food Stations">تنظيم الفعاليات</h3>
+          <ul>
+            <li data-ar="تجهيز Food Station للمناسبات" data-en="Food stations for occasions">تجهيز Food Station للمناسبات</li>
+            <li data-ar="تنظيم فعاليات وافتتاحات" data-en="Openings &amp; event management">تنظيم فعاليات وافتتاحات</li>
+            <li data-ar="إدارة الحشود وتنظيم الدخول" data-en="Crowd &amp; entry management">إدارة الحشود وتنظيم الدخول</li>
+          </ul>
+        </article>
+
+        <!-- 07 الباقات — featured -->
+        <article class="card card-featured rv">
+          <div class="cf-body">
+            <div class="card-top" style="justify-content:flex-start;gap:1rem;margin-bottom:.9rem">
+              <span class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2.5c2.8 2 4 5.2 4 8.5 0 1.2-.15 2.3-.4 3.3l-3.6 3.6-3.6-3.6c-.25-1-.4-2.1-.4-3.3 0-3.3 1.2-6.5 4-8.5Z"/>
+                  <circle cx="12" cy="9" r="1.8"/>
+                  <path d="M8.3 14.6 5.6 17l2.9.9"/>
+                  <path d="M15.7 14.6 18.4 17l-2.9.9"/>
+                  <path d="M12 18.6v2.9"/>
+                </svg>
+              </span>
+              <span class="card-idx">07</span>
+            </div>
+            <h3 data-ar="الباقات المتكاملة" data-en="Full Packages">الباقات المتكاملة</h3>
+            <p data-ar="اختر باقة واحدة ونتكفّل بالباقي — تصميم وطباعة وإطلاق. الخيار الأسرع للمشاريع الجديدة." data-en="Pick one package and we handle the rest — design, print and launch. The fastest path for new ventures.">اختر باقة واحدة ونتكفّل بالباقي — تصميم وطباعة وإطلاق. الخيار الأسرع للمشاريع الجديدة.</p>
+            <div class="cf-chips">
+              <span data-ar="تجهيز براند كامل من الصفر" data-en="A complete brand from scratch">تجهيز براند كامل من الصفر</span>
+              <span data-ar="باكج افتتاح: لوحة + بوكس + منيو + إعلان" data-en="Opening package: sign + box + menu + ad">باكج افتتاح: لوحة + بوكس + منيو + إعلان</span>
+              <span data-ar="حلول تسويقية للمشاريع الجديدة" data-en="Integrated marketing for new projects">حلول تسويقية للمشاريع الجديدة</span>
+            </div>
+          </div>
+          <div class="cf-cta">
+            <a class="btn btn-outline-orange" data-wa data-msg-ar="مرحباً، أرغب بالاستفسار عن الباقات المتكاملة" data-msg-en="Hi, I'd like to ask about your full packages" href="#contact">
+              <span data-ar="اسأل عن الباقات" data-en="Ask about packages">اسأل عن الباقات</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PROCESS ============================ -->
+  <section class="section" id="process">
+    <div class="container">
+      <div class="section-head rv">
+        <p class="kicker" data-ar="كيف نعمل" data-en="HOW WE WORK">كيف نعمل</p>
+        <h2 data-ar="من الفكرة إلى التشغيل" data-en="From idea to operation">من الفكرة إلى التشغيل</h2>
+        <p class="sub" data-ar="أربع مراحل واضحة، وفريق واحد مسؤول عن كل التفاصيل." data-en="Four clear stages, one team accountable for every detail.">أربع مراحل واضحة، وفريق واحد مسؤول عن كل التفاصيل.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step rv">
+          <span class="step-idx">01</span>
+          <h3 data-ar="الفكرة والاستشارة" data-en="Idea &amp; consultation">الفكرة والاستشارة</h3>
+          <p data-ar="نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة." data-en="We listen to your idea, understand your concept and audience, and scope exactly what it needs.">نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة.</p>
+        </li>
+        <li class="step rv">
+          <span class="step-idx">02</span>
+          <h3 data-ar="الهوية والتصميم" data-en="Identity &amp; design">الهوية والتصميم</h3>
+          <p data-ar="لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك." data-en="Logo, identity, menu and packaging — a complete personality for your brand.">لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك.</p>
+        </li>
+        <li class="step rv">
+          <span class="step-idx">03</span>
+          <h3 data-ar="التنفيذ والطباعة" data-en="Production &amp; printing">التنفيذ والطباعة</h3>
+          <p data-ar="نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل." data-en="We print the boxes and cups, install the signage, and prep every physical detail.">نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل.</p>
+        </li>
+        <li class="step rv">
+          <span class="step-idx">04</span>
+          <h3 data-ar="الإطلاق والتشغيل" data-en="Launch &amp; operation">الإطلاق والتشغيل</h3>
+          <p data-ar="تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها." data-en="Shoots, ads, campaigns and an opening event — and we stay with you after.">تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================ OPENING PACKAGE ============================ -->
+  <section class="section" id="package">
+    <div class="container">
+      <div class="package-panel rv">
+        <div class="section-head" style="text-align:center">
+          <span class="badge" data-ar="الأكثر طلباً" data-en="MOST REQUESTED">الأكثر طلباً</span>
+          <h2 data-ar="باكج الافتتاح" data-en="The Opening Package">باكج الافتتاح</h2>
+          <p class="sub" data-ar="أربع قطع تجهّز مشروعك لأهم يوم في عمره: يوم الافتتاح." data-en="Four pieces that get you ready for the day that matters most: opening day.">أربع قطع تجهّز مشروعك لأهم يوم في عمره: يوم الافتتاح.</p>
+        </div>
+
+        <div class="formula">
+          <div class="f-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4h18"/><path d="M12 4v3"/><rect x="5" y="7" width="14" height="9" rx="1.5"/><path d="M8.5 11.5h7"/>
+            </svg>
+            <span data-ar="لوحة المحل" data-en="Shop sign">لوحة المحل</span>
+          </div>
+          <span class="f-op">+</span>
+          <div class="f-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3 20 7v10l-8 4-8-4V7l8-4Z"/><path d="M4 7l8 4 8-4"/><path d="M12 11v10"/>
+            </svg>
+            <span data-ar="بوكسات وتغليف" data-en="Boxes &amp; packaging">بوكسات وتغليف</span>
+          </div>
+          <span class="f-op">+</span>
+          <div class="f-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/>
+            </svg>
+            <span data-ar="منيو" data-en="Menu">منيو</span>
+          </div>
+          <span class="f-op">+</span>
+          <div class="f-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10.3 9.3v5.4l4.6-2.7Z"/>
+            </svg>
+            <span data-ar="إعلان مصوّر" data-en="Launch video">إعلان مصوّر</span>
+          </div>
+          <span class="f-op">=</span>
+          <div class="f-item f-result">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5Z"/>
+            </svg>
+            <span data-ar="افتتاح جاهز" data-en="Ready to open">افتتاح جاهز</span>
+          </div>
+        </div>
+
+        <p class="package-note" data-ar="ويمكنك إضافة فعالية افتتاح كاملة مع Food Station وتنظيم للدخول." data-en="Add a full opening event with a food station and entry management.">ويمكنك إضافة فعالية افتتاح كاملة مع Food Station وتنظيم للدخول.</p>
+
+        <a class="btn btn-primary" data-wa data-msg-ar="مرحباً، أرغب بطلب باكج الافتتاح (لوحة + بوكس + منيو + إعلان)" data-msg-en="Hi, I'd like to order the opening package (sign + box + menu + ad)" href="#contact">
+          <span data-ar="اطلب باكج الافتتاح" data-en="Get the opening package">اطلب باكج الافتتاح</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ WHY US ============================ -->
+  <section class="section" id="why">
+    <div class="container">
+      <div class="section-head rv">
+        <p class="kicker" data-ar="لماذا سكرين ميديا؟" data-en="WHY SCREEN MEDIA?">لماذا سكرين ميديا؟</p>
+        <h2 data-ar="فريق واحد بدل خمس جهات" data-en="One team instead of five vendors">فريق واحد بدل خمس جهات</h2>
+        <div class="aud-chips">
+          <span data-ar="مطاعم" data-en="Restaurants">مطاعم</span>
+          <span data-ar="كافيهات" data-en="Cafés">كافيهات</span>
+          <span data-ar="محلات تجارية" data-en="Retail stores">محلات تجارية</span>
+        </div>
+      </div>
+
+      <div class="why-grid">
+        <div class="why rv">
+          <h3 data-ar="حل متكامل" data-en="End to end">حل متكامل</h3>
+          <p data-ar="تصميم وطباعة وإنتاج وتسويق عند فريق واحد — بدون تنسيق بين موردين." data-en="Design, print, production and marketing under one roof — no juggling suppliers.">تصميم وطباعة وإنتاج وتسويق عند فريق واحد — بدون تنسيق بين موردين.</p>
+        </div>
+        <div class="why rv">
+          <h3 data-ar="نفهم قطاعك" data-en="We know F&amp;B">نفهم قطاعك</h3>
+          <p data-ar="متخصصون في المطاعم والكافيهات والمحلات — من البوكس إلى اللوحة." data-en="Specialists in restaurants, cafés and stores — from the box to the sign.">متخصصون في المطاعم والكافيهات والمحلات — من البوكس إلى اللوحة.</p>
+        </div>
+        <div class="why rv">
+          <h3 data-ar="سرعة والتزام" data-en="Fast &amp; reliable">سرعة والتزام</h3>
+          <p data-ar="جدول واضح وتسليم قبل موعد الافتتاح." data-en="A clear schedule, delivered before opening day.">جدول واضح وتسليم قبل موعد الافتتاح.</p>
+        </div>
+        <div class="why rv">
+          <h3 data-ar="معك بعد الافتتاح" data-en="With you after launch">معك بعد الافتتاح</h3>
+          <p data-ar="إدارة حسابات وحملات وتشغيل مستمر بعد الإطلاق." data-en="Account management, campaigns and ongoing operation after launch.">إدارة حسابات وحملات وتشغيل مستمر بعد الإطلاق.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FINAL CTA ============================ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="cta-panel rv">
+        <h2 data-ar="جاهز تفتتح؟" data-en="Ready to open?">جاهز تفتتح؟</h2>
+        <p data-ar="أرسل فكرتك اليوم، ونعود لك بخطة وعرض سعر واضح." data-en="Send us your idea today — we'll come back with a clear plan and a quote.">أرسل فكرتك اليوم، ونعود لك بخطة وعرض سعر واضح.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" data-wa href="#contact">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            <span data-ar="تواصل واتساب" data-en="Chat on WhatsApp">تواصل واتساب</span>
+          </a>
+          <a class="btn btn-ghost" data-tel href="#contact">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span data-ar="اتصل بنا" data-en="Call us">اتصل بنا</span>
+          </a>
+        </div>
+        <p class="cta-small" data-ar="نرد خلال ساعات العمل في نفس اليوم" data-en="WE REPLY THE SAME BUSINESS DAY">نرد خلال ساعات العمل في نفس اليوم</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="brand" aria-label="Screen Media">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5 21 12 6 20.5Z" fill="#141008"/></svg>
+          </span>
+          <span class="brand-name">SCREEN <b>MEDIA</b></span>
+        </a>
+        <p data-ar="حلول متكاملة للمطاعم والكافيهات والمحلات التجارية — من الفكرة إلى التنفيذ والتشغيل." data-en="Integrated solutions for restaurants, cafés and retail stores — from idea to execution and operation.">حلول متكاملة للمطاعم والكافيهات والمحلات التجارية — من الفكرة إلى التنفيذ والتشغيل.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">INSTAGRAM</a>
+          <a href="#" aria-label="TikTok">TIKTOK</a>
+          <a href="#" aria-label="Snapchat">SNAPCHAT</a>
+          <a href="#" aria-label="X">X</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-ar="روابط سريعة" data-en="Quick links">روابط سريعة</h4>
+        <ul>
+          <li><a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a></li>
+          <li><a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a></li>
+          <li><a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a></li>
+          <li><a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a></li>
+          <li><a href="#contact" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-ar="تواصل معنا" data-en="Contact">تواصل معنا</h4>
+        <ul>
+          <li class="contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <a data-tel data-phone-label dir="ltr" href="#contact">+966 50 000 0000</a>
+          </li>
+          <li class="contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg>
+            <a data-email dir="ltr" href="#contact">info@screenmedia.sa</a>
+          </li>
+          <li class="contact-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <span data-ar="المملكة العربية السعودية" data-en="Saudi Arabia">المملكة العربية السعودية</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p><span dir="ltr">© <span id="year">2026</span> Screen Media</span> — <span data-ar="جميع الحقوق محفوظة" data-en="All rights reserved">جميع الحقوق محفوظة</span></p>
+      <p class="mono" dir="ltr">SCREEN ▸ STREET</p>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a class="wa-fab" data-wa href="#contact" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+</a>
+
+<script>
+/* ============================================================
+   ⚠️ EDIT HERE — بيانات التواصل (رقم واحد لكل الأزرار)
+   Put the real WhatsApp number (no +, no spaces), phone & email.
+   ============================================================ */
+const CONTACT = {
+  wa:    "966500000000",          /* WhatsApp: 9665XXXXXXXX */
+  tel:   "+966500000000",         /* phone for tel: links   */
+  telLabel: "+966 50 000 0000",   /* phone as displayed     */
+  email: "info@screenmedia.sa"
+};
+const DEFAULT_WA_MSG = {
+  ar: "مرحباً سكرين ميديا! أرغب بالاستفسار عن خدماتكم.",
+  en: "Hi Screen Media! I'd like to ask about your services."
+};
+const META = {
+  ar: {
+    title: "سكرين ميديا | تصميم، طباعة، إنتاج وتسويق للمطاعم والكافيهات",
+    desc:  "سكرين ميديا — حلول متكاملة للمطاعم والكافيهات والمحلات التجارية: هوية بصرية، طباعة وتغليف، لوحات، إنتاج إعلامي، تسويق وفعاليات. من الفكرة إلى يوم الافتتاح."
+  },
+  en: {
+    title: "Screen Media | Design, Print, Media & Marketing for Restaurants & Cafés",
+    desc:  "Screen Media — integrated solutions for restaurants, cafés and retail stores: brand identity, printing & packaging, signage, media production, marketing and events. From idea to opening day."
+  }
+};
+
+/* ---------- language toggle ---------- */
+const html = document.documentElement;
+const langToggle = document.getElementById("lang-toggle");
+let lang = localStorage.getItem("sm-lang") || "ar";
+
+function applyContacts(){
+  document.querySelectorAll("[data-wa]").forEach(a=>{
+    const msg = a.dataset["msg" + (lang === "ar" ? "Ar" : "En")] || DEFAULT_WA_MSG[lang];
+    a.href = "https://wa.me/" + CONTACT.wa + "?text=" + encodeURIComponent(msg);
+    a.target = "_blank"; a.rel = "noopener";
+  });
+  document.querySelectorAll("[data-tel]").forEach(a=>{ a.href = "tel:" + CONTACT.tel; });
+  document.querySelectorAll("[data-phone-label]").forEach(a=>{ a.textContent = CONTACT.telLabel; });
+  document.querySelectorAll("[data-email]").forEach(a=>{ a.href = "mailto:" + CONTACT.email; a.textContent = CONTACT.email; });
+}
+
+function setLang(l){
+  lang = l;
+  document.querySelectorAll("[data-ar]").forEach(el=>{ el.textContent = el.dataset[l]; });
+  html.lang = l;
+  html.dir  = l === "ar" ? "rtl" : "ltr";
+  document.body.classList.toggle("en", l === "en");
+  document.title = META[l].title;
+  const md = document.querySelector('meta[name="description"]');
+  if (md) md.content = META[l].desc;
+  langToggle.textContent = l === "ar" ? "EN" : "عربي";
+  langToggle.setAttribute("aria-label", l === "ar" ? "Switch to English" : "التبديل إلى العربية");
+  localStorage.setItem("sm-lang", l);
+  applyContacts();
+}
+langToggle.addEventListener("click", ()=> setLang(lang === "ar" ? "en" : "ar"));
+setLang(lang);
+
+/* ---------- mobile menu ---------- */
+const burger = document.getElementById("burger");
+const navLinks = document.getElementById("nav-links");
+burger.addEventListener("click", ()=>{
+  const open = navLinks.classList.toggle("open");
+  burger.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", open);
+});
+navLinks.querySelectorAll("a").forEach(a=> a.addEventListener("click", ()=>{
+  navLinks.classList.remove("open");
+  burger.classList.remove("open");
+  burger.setAttribute("aria-expanded", "false");
+}));
+
+/* ---------- scrubber (scroll progress) ---------- */
+const bar = document.getElementById("scrubber-bar");
+let ticking = false;
+function updateScrubber(){
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+  ticking = false;
+}
+addEventListener("scroll", ()=>{
+  if (!ticking){ requestAnimationFrame(updateScrubber); ticking = true; }
+}, { passive:true });
+updateScrubber();
+
+/* ---------- reveal on scroll ---------- */
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduceMotion && "IntersectionObserver" in window){
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach((e)=>{
+      if (e.isIntersecting){
+        const siblings = [...e.target.parentElement.children].filter(c=>c.classList.contains("rv"));
+        e.target.style.transitionDelay = (siblings.indexOf(e.target) % 6) * 70 + "ms";
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .15, rootMargin: "0px 0px -40px" });
+  document.querySelectorAll(".rv").forEach(el=> io.observe(el));
+} else {
+  document.querySelectorAll(".rv").forEach(el=> el.classList.add("in"));
+}
+
+/* ---------- animated counters ---------- */
+function animateCount(el){
+  const target = +el.dataset.target;
+  if (reduceMotion){ el.textContent = target; return; }
+  const t0 = performance.now(), dur = 1400;
+  (function tick(t){
+    const p = Math.min((t - t0) / dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+if ("IntersectionObserver" in window){
+  const cio = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){ animateCount(e.target); cio.unobserve(e.target); }
+    });
+  }, { threshold: .6 });
+  document.querySelectorAll(".count").forEach(el=> cio.observe(el));
+} else {
+  document.querySelectorAll(".count").forEach(el=> el.textContent = el.dataset.target);
+}
+
+/* ---------- live timecode (the page is playing) ---------- */
+const tc = document.getElementById("tc-time");
+if (tc && !reduceMotion){
+  const start = performance.now();
+  const pad = n => String(n).padStart(2, "0");
+  (function tick(t){
+    const s = (t - start) / 1000;
+    tc.textContent = pad(Math.floor(s/60)) + ":" + pad(Math.floor(s%60)) + ":" + pad(Math.floor((s*24)%24));
+    requestAnimationFrame(tick);
+  })(start);
+}
+
+/* ---------- duplicate ticker content for seamless loop ---------- */
+const track = document.getElementById("ticker-track");
+track.innerHTML += track.innerHTML;
+
+/* ---------- year ---------- */
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
