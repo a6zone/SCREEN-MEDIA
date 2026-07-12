@@ -226,22 +226,22 @@ html.light .theme-toggle .icon-moon{display:none}
   -webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
   mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
 }
-/* two floating triangles, placed away from the headline */
+/* two floating double-chevrons, low opacity, away from the headline */
 .hero-tri{
   position:absolute;
-  width:min(34vh,320px);height:min(34vh,320px);
+  width:min(26vw,280px);height:auto;
   pointer-events:none;
-  filter:drop-shadow(0 0 46px rgba(242,149,31,.18));
+  opacity:.25;
 }
-.tri-a{top:13%;left:11%;animation:triFloatA 9s ease-in-out infinite}
-.tri-b{top:55%;right:8%;animation:triFloatB 11s ease-in-out infinite}
+.tri-a{top:14%;left:9%;animation:triFloatA 9s ease-in-out infinite}
+.tri-b{top:58%;right:7%;animation:triFloatB 11s ease-in-out infinite}
 @keyframes triFloatA{
-  0%,100%{transform:translateY(0) rotate(-8deg)}
-  50%{transform:translateY(-20px) rotate(-3deg)}
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-16px)}
 }
 @keyframes triFloatB{
-  0%,100%{transform:translateY(0) rotate(9deg)}
-  50%{transform:translateY(18px) rotate(4deg)}
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(14px)}
 }
 
 /* scroll-down button — label + two downward triangles */
@@ -663,13 +663,13 @@ body.en .cta-small{letter-spacing:.05em}
   .f-item{flex-direction:row;justify-content:flex-start;padding:1rem 1.3rem}
   .f-op{padding-block:.1rem}
   .footer-grid{grid-template-columns:1fr;gap:2.2rem}
-  .stats{gap:1.4rem;margin-top:2.4rem}
+  .stats{gap:1.4rem;margin-top:2.75rem}
   .stat-label{font-size:.78rem}
   .hero{padding-top:calc(var(--header-h) + 1.2rem);padding-bottom:3rem}
-  .hero h1{line-height:1.25;margin-block:.9rem .6rem}
-  .hero-tri{width:110px;height:110px}
-  .tri-a{top:9%;left:3%}
-  .tri-b{top:auto;bottom:6%;right:3%}
+  .hero h1{line-height:1.3;margin-block:1.75rem}
+  .hero-tri{width:120px;height:auto}
+  .tri-a{top:9%;left:4%}
+  .tri-b{top:auto;bottom:7%;right:4%}
   .scroll-down{margin-top:2rem}
   .cta-row .btn{flex:1 1 auto}
 }
@@ -775,20 +775,13 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="hero-grid" aria-hidden="true"></div>
-    <svg class="hero-tri tri-a" viewBox="0 0 100 100" aria-hidden="true">
-      <defs>
-        <linearGradient id="triG" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#9CBED7"/>
-          <stop offset=".5" stop-color="#4A90C0"/>
-          <stop offset="1" stop-color="#244D87"/>
-        </linearGradient>
-      </defs>
-      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
-      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+    <svg class="hero-tri tri-a" viewBox="0 0 100 62" aria-hidden="true">
+      <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <svg class="hero-tri tri-b" viewBox="0 0 100 100" aria-hidden="true">
-      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
-      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+    <svg class="hero-tri tri-b" viewBox="0 0 100 62" aria-hidden="true">
+      <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
 
     <div class="container hero-inner">
