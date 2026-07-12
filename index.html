@@ -251,8 +251,9 @@ html.light .theme-toggle .icon-moon{display:none}
   border-radius:14px;
   transition:transform .25s var(--ease),opacity .25s var(--ease);
 }
-.scroll-down svg{width:76px;height:auto;animation:bob 1.9s ease-in-out infinite}
+.scroll-down svg{width:118px;height:auto;opacity:.6;animation:bob 1.9s ease-in-out infinite;transition:opacity .25s var(--ease)}
 .scroll-down:hover{transform:translateY(3px)}
+.scroll-down:hover svg{opacity:1}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
@@ -662,13 +663,13 @@ body.en .cta-small{letter-spacing:.05em}
   .footer-grid{grid-template-columns:1fr;gap:2.2rem}
   .stats{gap:1.4rem;margin-top:2.75rem}
   .stat-label{font-size:.78rem}
-  .hero{padding-top:calc(var(--header-h) + 1.2rem);padding-bottom:3rem}
+  .hero{min-height:auto;padding-top:calc(var(--header-h) + 2.6rem);padding-bottom:2.4rem}
   .hero h1{line-height:1.3;margin-block:1.75rem}
   .hero-tri{width:120px;height:120px}
   .tri-a{top:9%;left:4%}
   .tri-b{top:auto;bottom:7%;right:4%}
-  .scroll-down{margin-top:2rem}
-  .scroll-down svg{width:64px}
+  .scroll-down{margin-top:1.8rem}
+  .scroll-down svg{width:96px}
   .cta-row .btn{flex:1 1 auto}
 }
 
@@ -813,9 +814,9 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
       </div>
 
       <a class="scroll-down" id="scroll-down" href="#about" aria-label="Scroll down">
-        <svg viewBox="0 0 100 62" aria-hidden="true">
-          <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg viewBox="0 0 120 46" aria-hidden="true">
+          <path d="M6 6 60 40 114 6" fill="none" stroke="#4A90C0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 8 60 26 88 8" fill="none" stroke="#F2951F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
 
