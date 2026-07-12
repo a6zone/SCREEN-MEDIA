@@ -226,37 +226,34 @@ html.light .theme-toggle .icon-moon{display:none}
   -webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
   mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
 }
-/* two floating double-chevrons, low opacity, away from the headline */
+/* two floating triangles, placed away from the headline */
 .hero-tri{
   position:absolute;
-  width:min(26vw,280px);height:auto;
+  width:min(34vh,320px);height:min(34vh,320px);
   pointer-events:none;
-  opacity:.25;
+  filter:drop-shadow(0 0 46px rgba(242,149,31,.18));
 }
-.tri-a{top:14%;left:9%;animation:triFloatA 9s ease-in-out infinite}
-.tri-b{top:58%;right:7%;animation:triFloatB 11s ease-in-out infinite}
+.tri-a{top:13%;left:11%;animation:triFloatA 9s ease-in-out infinite}
+.tri-b{top:55%;right:8%;animation:triFloatB 11s ease-in-out infinite}
 @keyframes triFloatA{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-16px)}
+  0%,100%{transform:translateY(0) rotate(-8deg)}
+  50%{transform:translateY(-20px) rotate(-3deg)}
 }
 @keyframes triFloatB{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(14px)}
+  0%,100%{transform:translateY(0) rotate(9deg)}
+  50%{transform:translateY(18px) rotate(4deg)}
 }
 
-/* scroll-down button — label + two downward triangles */
+/* scroll-down chevron — clickable double triangle */
 .scroll-down{
-  display:inline-flex;flex-direction:column;align-items:center;gap:.2rem;
-  padding:.75em 1.9em .6em;border-radius:999px;
-  border:1px solid var(--line-strong);
-  font-family:var(--font-body);font-weight:700;font-size:.95rem;
-  color:var(--txt);
-  margin-top:2.8rem;
-  transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:.7rem 1rem;margin-top:2.6rem;
+  border-radius:14px;
+  transition:transform .25s var(--ease),opacity .25s var(--ease);
 }
-.scroll-down svg{width:18px;height:18px;color:var(--sm-orange);animation:bob 1.9s ease-in-out infinite}
-.scroll-down:hover{border-color:var(--sm-orange);background:rgba(242,149,31,.08);transform:translateY(-2px)}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.scroll-down svg{width:76px;height:auto;animation:bob 1.9s ease-in-out infinite}
+.scroll-down:hover{transform:translateY(3px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
 .kicker{
@@ -667,10 +664,11 @@ body.en .cta-small{letter-spacing:.05em}
   .stat-label{font-size:.78rem}
   .hero{padding-top:calc(var(--header-h) + 1.2rem);padding-bottom:3rem}
   .hero h1{line-height:1.3;margin-block:1.75rem}
-  .hero-tri{width:120px;height:auto}
+  .hero-tri{width:120px;height:120px}
   .tri-a{top:9%;left:4%}
   .tri-b{top:auto;bottom:7%;right:4%}
   .scroll-down{margin-top:2rem}
+  .scroll-down svg{width:64px}
   .cta-row .btn{flex:1 1 auto}
 }
 
@@ -775,13 +773,20 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="hero-grid" aria-hidden="true"></div>
-    <svg class="hero-tri tri-a" viewBox="0 0 100 62" aria-hidden="true">
-      <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="hero-tri tri-a" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <linearGradient id="triG" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#9CBED7"/>
+          <stop offset=".5" stop-color="#4A90C0"/>
+          <stop offset="1" stop-color="#244D87"/>
+        </linearGradient>
+      </defs>
+      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
     </svg>
-    <svg class="hero-tri tri-b" viewBox="0 0 100 62" aria-hidden="true">
-      <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg class="hero-tri tri-b" viewBox="0 0 100 100" aria-hidden="true">
+      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
     </svg>
 
     <div class="container hero-inner">
@@ -807,11 +812,10 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         </div>
       </div>
 
-      <a class="scroll-down" id="scroll-down" href="#about">
-        <span data-ar="اكتشف" data-en="Discover">اكتشف</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5.5 3.5h13L12 10.5Z" fill="currentColor" opacity=".4"/>
-          <path d="M5.5 12.5h13L12 19.5Z" fill="currentColor"/>
+      <a class="scroll-down" id="scroll-down" href="#about" aria-label="Scroll down">
+        <svg viewBox="0 0 100 62" aria-hidden="true">
+          <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
 
@@ -1282,6 +1286,8 @@ function setLang(l){
   const md = document.querySelector('meta[name="description"]');
   if (md) md.content = META[l].desc;
   langToggle.textContent = l === "ar" ? "EN" : "عربي";
+  const sd = document.getElementById("scroll-down");
+  if (sd) sd.setAttribute("aria-label", l === "ar" ? "انتقل إلى الأسفل" : "Scroll down");
   langToggle.setAttribute("aria-label", l === "ar" ? "Switch to English" : "التبديل إلى العربية");
   localStorage.setItem("sm-lang", l);
   applyContacts();
