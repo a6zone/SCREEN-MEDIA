@@ -238,12 +238,6 @@ html.light .theme-toggle .icon-moon{display:none}
   0%,100%{transform:translate(-50%,-52%)}
   50%{transform:translate(-50%,-55%)}
 }
-/* inner group rotates/scales with scroll (JS drives the transform) */
-.hero-tri-spin{
-  transform-origin:50px 50px;
-  will-change:transform;
-  transition:transform .6s var(--ease);
-}
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
 .kicker{
@@ -290,22 +284,6 @@ body.en .kicker{letter-spacing:.06em}
 }
 .stat-num small{font-size:.6em;color:var(--sm-orange);font-weight:600}
 .stat-label{font-size:.86rem;color:var(--steel-txt);margin-top:.15rem}
-
-/* live timecode */
-.tc{
-  margin-top:3rem;
-  display:inline-flex;align-items:center;gap:.8em;
-  font-family:var(--font-mono);font-size:.78rem;color:rgba(177,237,253,.6);
-  letter-spacing:.06em;
-}
-.tc [data-ar]{letter-spacing:0}
-body.en .tc [data-ar]{letter-spacing:.06em}
-.tc-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--sm-orange);
-  box-shadow:0 0 10px rgba(242,149,31,.8);
-  animation:pulse 1.6s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 
 /* ============================================================
    Ticker — "now showing" services marquee
@@ -682,7 +660,6 @@ html.light .hero::before{
     radial-gradient(40% 34% at 50% 58%,rgba(242,149,31,.08),transparent 70%);
 }
 html.light .hero-grid{opacity:.7}
-html.light .tc{color:rgba(29,111,163,.75)}
 html.light .services{background:linear-gradient(180deg,transparent,rgba(223,231,239,.55) 20%,rgba(223,231,239,.55) 80%,transparent)}
 html.light .card:hover{box-shadow:0 18px 44px rgba(36,77,135,.14)}
 html.light .cf-chips span{background:rgba(255,255,255,.65)}
@@ -712,7 +689,6 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .hero-tri{animation:none}
-  .tc-dot{animation:none}
   .ticker{overflow-x:auto}
   .ticker-track{animation:none}
   .rv{opacity:1;transform:none;transition:none}
@@ -782,10 +758,8 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
           <stop offset="1" stop-color="#244D87"/>
         </linearGradient>
       </defs>
-      <g class="hero-tri-spin" id="hero-tri-spin">
-        <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
-        <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
-      </g>
+      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
     </svg>
 
     <div class="container hero-inner">
@@ -821,12 +795,6 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         </div>
       </div>
 
-      <div class="tc" dir="ltr">
-        <span class="tc-dot"></span>
-        <span id="tc-time">00:00:00</span>
-        <span>/</span>
-        <span data-ar="من الفكرة إلى الافتتاح" data-en="IDEA → OPENING DAY">من الفكرة إلى الافتتاح</span>
-      </div>
     </div>
   </section>
 
@@ -1351,24 +1319,6 @@ updateScrubber();
 
 /* ---------- reveal on scroll ---------- */
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---------- hero triangle — scroll-driven rotation ---------- */
-const triSpin = document.getElementById("hero-tri-spin");
-if (triSpin && !reduceMotion){
-  let triTicking = false;
-  function updateTri(){
-    const y = scrollY;
-    const p = Math.min(y / innerHeight, 1);       /* progress through hero */
-    triSpin.style.transform =
-      "rotate(" + (y * 0.12).toFixed(2) + "deg) scale(" + (1 + p * 0.3).toFixed(3) + ")";
-    triSpin.style.opacity = (1 - p * 0.5).toFixed(3);
-    triTicking = false;
-  }
-  addEventListener("scroll", ()=>{
-    if (!triTicking){ requestAnimationFrame(updateTri); triTicking = true; }
-  }, { passive:true });
-  updateTri();
-}
 if (!reduceMotion && "IntersectionObserver" in window){
   const io = new IntersectionObserver(entries=>{
     entries.forEach((e)=>{
@@ -1405,18 +1355,6 @@ if ("IntersectionObserver" in window){
   document.querySelectorAll(".count").forEach(el=> cio.observe(el));
 } else {
   document.querySelectorAll(".count").forEach(el=> el.textContent = el.dataset.target);
-}
-
-/* ---------- live timecode (the page is playing) ---------- */
-const tc = document.getElementById("tc-time");
-if (tc && !reduceMotion){
-  const start = performance.now();
-  const pad = n => String(n).padStart(2, "0");
-  (function tick(t){
-    const s = (t - start) / 1000;
-    tc.textContent = pad(Math.floor(s/60)) + ":" + pad(Math.floor(s%60)) + ":" + pad(Math.floor((s*24)%24));
-    requestAnimationFrame(tick);
-  })(start);
 }
 
 /* ---------- duplicate ticker content for seamless loop ---------- */
