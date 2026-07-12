@@ -244,19 +244,16 @@ html.light .theme-toggle .icon-moon{display:none}
   50%{transform:translateY(18px) rotate(4deg)}
 }
 
-/* scroll-down button — label + two downward triangles */
+/* scroll-down chevron — clickable double triangle */
 .scroll-down{
-  display:inline-flex;flex-direction:column;align-items:center;gap:.2rem;
-  padding:.75em 1.9em .6em;border-radius:999px;
-  border:1px solid var(--line-strong);
-  font-family:var(--font-body);font-weight:700;font-size:.95rem;
-  color:var(--txt);
-  margin-top:2.8rem;
-  transition:border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:.7rem 1rem;margin-top:2.6rem;
+  border-radius:14px;
+  transition:transform .25s var(--ease),opacity .25s var(--ease);
 }
-.scroll-down svg{width:18px;height:18px;color:var(--sm-orange);animation:bob 1.9s ease-in-out infinite}
-.scroll-down:hover{border-color:var(--sm-orange);background:rgba(242,149,31,.08);transform:translateY(-2px)}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.scroll-down svg{width:76px;height:auto;animation:bob 1.9s ease-in-out infinite}
+.scroll-down:hover{transform:translateY(3px)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
 .kicker{
@@ -663,14 +660,15 @@ body.en .cta-small{letter-spacing:.05em}
   .f-item{flex-direction:row;justify-content:flex-start;padding:1rem 1.3rem}
   .f-op{padding-block:.1rem}
   .footer-grid{grid-template-columns:1fr;gap:2.2rem}
-  .stats{gap:1.4rem;margin-top:2.4rem}
+  .stats{gap:1.4rem;margin-top:2.75rem}
   .stat-label{font-size:.78rem}
   .hero{padding-top:calc(var(--header-h) + 1.2rem);padding-bottom:3rem}
-  .hero h1{line-height:1.25;margin-block:.9rem .6rem}
-  .hero-tri{width:110px;height:110px}
-  .tri-a{top:9%;left:3%}
-  .tri-b{top:auto;bottom:6%;right:3%}
+  .hero h1{line-height:1.3;margin-block:1.75rem}
+  .hero-tri{width:120px;height:120px}
+  .tri-a{top:9%;left:4%}
+  .tri-b{top:auto;bottom:7%;right:4%}
   .scroll-down{margin-top:2rem}
+  .scroll-down svg{width:64px}
   .cta-row .btn{flex:1 1 auto}
 }
 
@@ -814,11 +812,10 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         </div>
       </div>
 
-      <a class="scroll-down" id="scroll-down" href="#about">
-        <span data-ar="اكتشف" data-en="Discover">اكتشف</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5.5 3.5h13L12 10.5Z" fill="currentColor" opacity=".4"/>
-          <path d="M5.5 12.5h13L12 19.5Z" fill="currentColor"/>
+      <a class="scroll-down" id="scroll-down" href="#about" aria-label="Scroll down">
+        <svg viewBox="0 0 100 62" aria-hidden="true">
+          <path d="M8 8 50 50 92 8" fill="none" stroke="#4A90C0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 10 50 32 72 10" fill="none" stroke="#F2951F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
 
@@ -1289,6 +1286,8 @@ function setLang(l){
   const md = document.querySelector('meta[name="description"]');
   if (md) md.content = META[l].desc;
   langToggle.textContent = l === "ar" ? "EN" : "عربي";
+  const sd = document.getElementById("scroll-down");
+  if (sd) sd.setAttribute("aria-label", l === "ar" ? "انتقل إلى الأسفل" : "Scroll down");
   langToggle.setAttribute("aria-label", l === "ar" ? "Switch to English" : "التبديل إلى العربية");
   localStorage.setItem("sm-lang", l);
   applyContacts();
