@@ -238,6 +238,12 @@ html.light .theme-toggle .icon-moon{display:none}
   0%,100%{transform:translate(-50%,-52%)}
   50%{transform:translate(-50%,-55%)}
 }
+/* inner group rotates/scales with scroll (JS drives the transform) */
+.hero-tri-spin{
+  transform-origin:50px 50px;
+  will-change:transform;
+  transition:transform .6s var(--ease);
+}
 .hero-inner{position:relative;z-index:2;max-width:900px}
 
 .kicker{
@@ -265,10 +271,6 @@ body.en .kicker{letter-spacing:.06em}
 .hl-street{
   background:linear-gradient(120deg,var(--sm-orange-light),var(--sm-orange) 70%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero .lead{
-  color:var(--muted);font-size:clamp(1.02rem,1.5vw,1.2rem);
-  max-width:46em;margin-inline:auto;
 }
 .cta-row{
   display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
@@ -330,6 +332,18 @@ body.en .tc [data-ar]{letter-spacing:.06em}
   content:"";width:8px;height:9px;
   clip-path:polygon(0 0,0 100%,100% 50%);
   background:var(--sm-orange);opacity:.8;
+}
+
+/* ============================================================
+   Intro statement — the brand line, in its own frame
+   ============================================================ */
+.intro{padding-block:clamp(3.4rem,7vw,5.5rem)}
+.intro-panel{max-width:840px;margin-inline:auto;text-align:center}
+.intro-text{
+  margin-top:1.1rem;
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(1.15rem,2.4vw,1.6rem);line-height:2;
+  color:var(--txt);text-wrap:balance;
 }
 
 /* ============================================================
@@ -768,8 +782,10 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
           <stop offset="1" stop-color="#244D87"/>
         </linearGradient>
       </defs>
-      <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
-      <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+      <g class="hero-tri-spin" id="hero-tri-spin">
+        <path d="M28 16 84 50 28 84Z" fill="none" stroke="url(#triG)" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+        <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+      </g>
     </svg>
 
     <div class="container hero-inner">
@@ -778,8 +794,6 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
       <h1>
         <span data-ar="نأخذ مشروعك من " data-en="Your brand, from the ">نأخذ مشروعك من </span><span class="hl-screen" data-ar="الشاشة" data-en="screen">الشاشة</span><span data-ar=" إلى " data-en=" to the "> إلى </span><span class="hl-street" data-ar="الشارع" data-en="street">الشارع</span>
       </h1>
-
-      <p class="lead" data-ar="سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح." data-en="Screen Media is one team that gets your restaurant, café or store fully ready: identity &amp; design, printing &amp; packaging, signage, media production, marketing and events — from the first idea to opening day.">سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح.</p>
 
       <div class="cta-row">
         <a class="btn btn-primary" data-wa href="#contact">
@@ -837,6 +851,16 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
       <span class="ticker-item" data-ar="Food Station" data-en="Food stations">Food Station</span>
     </div>
   </div>
+
+  <!-- ============================ INTRO ============================ -->
+  <section class="section intro" id="about">
+    <div class="container">
+      <div class="intro-panel rv">
+        <p class="kicker" data-ar="من نحن" data-en="WHO WE ARE">من نحن</p>
+        <p class="intro-text" data-ar="سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح." data-en="Screen Media is one team that gets your restaurant, café or store fully ready: identity &amp; design, printing &amp; packaging, signage, media production, marketing and events — from the first idea to opening day.">سكرين ميديا — فريق واحد يجهّز مشروعك كاملاً: الهوية والتصميم، الطباعة والتغليف، اللوحات، الإنتاج الإعلامي، التسويق، والفعاليات. من الفكرة إلى يوم الافتتاح.</p>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================ SERVICES ============================ -->
   <section class="section services" id="services">
@@ -1192,11 +1216,11 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <ul>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <a data-tel data-phone-label dir="ltr" href="#contact">+966 50 737 9809</a>
+            <a data-tel data-phone-label dir="ltr" href="#contact">++966 54 921 9794</a>
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg>
-            <a data-email dir="ltr" href="#contact">info@screenmedia</a>
+            <a data-email dir="ltr" href="#contact">info@screenmedia.sa</a>
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
@@ -1224,9 +1248,9 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
    Put the real WhatsApp number (no +, no spaces), phone & email.
    ============================================================ */
 const CONTACT = {
-  wa:    "966507379809",          /* WhatsApp: 9665XXXXXXXX */
-  tel:   "+966507379809",         /* phone for tel: links   */
-  telLabel: "+966 50 737 9809",   /* phone as displayed     */
+  wa:    "966549219794",          /* WhatsApp: 9665XXXXXXXX */
+  tel:   "+966549219794",         /* phone for tel: links   */
+  telLabel: "+966 54 921 9794",   /* phone as displayed     */
   email: "info@screenmedia.sa"
 };
 const DEFAULT_WA_MSG = {
@@ -1327,6 +1351,24 @@ updateScrubber();
 
 /* ---------- reveal on scroll ---------- */
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- hero triangle — scroll-driven rotation ---------- */
+const triSpin = document.getElementById("hero-tri-spin");
+if (triSpin && !reduceMotion){
+  let triTicking = false;
+  function updateTri(){
+    const y = scrollY;
+    const p = Math.min(y / innerHeight, 1);       /* progress through hero */
+    triSpin.style.transform =
+      "rotate(" + (y * 0.12).toFixed(2) + "deg) scale(" + (1 + p * 0.3).toFixed(3) + ")";
+    triSpin.style.opacity = (1 - p * 0.5).toFixed(3);
+    triTicking = false;
+  }
+  addEventListener("scroll", ()=>{
+    if (!triTicking){ requestAnimationFrame(updateTri); triTicking = true; }
+  }, { passive:true });
+  updateTri();
+}
 if (!reduceMotion && "IntersectionObserver" in window){
   const io = new IntersectionObserver(entries=>{
     entries.forEach((e)=>{
