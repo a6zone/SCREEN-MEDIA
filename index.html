@@ -448,38 +448,64 @@ body.en .kicker{letter-spacing:.06em}
   background:linear-gradient(180deg,var(--sm-orange),#E38A15);
   color:#141008;border-color:transparent;
 }
-.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
-.work-card{
-  border-radius:var(--radius);overflow:hidden;
-  border:1px solid var(--line);background:var(--panel);
-  transition:transform .28s var(--ease),border-color .28s var(--ease),box-shadow .28s var(--ease);
+/* focus slider — centered card enlarged, neighbours peek at the edges */
+.work-slider{position:relative}
+.ws-viewport{overflow:hidden;touch-action:pan-y;cursor:grab}
+.ws-viewport.dragging{cursor:grabbing}
+.ws-track{
+  display:flex;align-items:center;gap:clamp(.9rem,2vw,1.6rem);
+  will-change:transform;
+  transition:transform .6s var(--ease);
 }
-.work-card:hover{transform:translateY(-5px);border-color:rgba(242,149,31,.45);box-shadow:0 18px 44px rgba(0,0,0,.35)}
-.work-card.hide{display:none}
-@keyframes workIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.work-card.pop{animation:workIn .4s var(--ease)}
-.work-media{
-  position:relative;aspect-ratio:4/3;overflow:hidden;
-  background:
-    radial-gradient(70% 90% at 30% 20%,rgba(36,77,135,.5),transparent 70%),
-    linear-gradient(150deg,var(--panel-2),var(--panel));
+.ws-slide{
+  position:relative;flex:0 0 min(620px,66%);
+  aspect-ratio:4/3;border-radius:calc(var(--radius) + 6px);overflow:hidden;
+  background:var(--panel);border:1px solid var(--line);
+  transform:scale(.84);opacity:.4;filter:saturate(.75);
+  transition:transform .6s var(--ease),opacity .6s var(--ease),filter .6s var(--ease),box-shadow .6s var(--ease);
+  cursor:pointer;user-select:none;
 }
-.work-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
-.work-card:hover .work-media img{transform:scale(1.06)}
-.work-ph{
-  position:absolute;inset:0;display:grid;place-items:center;
-  font-family:var(--font-display);font-weight:800;font-size:1.6rem;
-  color:rgba(156,190,215,.4);text-align:center;padding:1rem;
+.ws-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.ws-slide.active{
+  transform:scale(1);opacity:1;filter:none;cursor:default;
+  box-shadow:0 34px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.35);
 }
-.work-media img{position:relative;z-index:1}
-.work-info{padding:1.05rem 1.25rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.work-info h3{font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.5}
-.work-tag{
-  flex-shrink:0;font-family:var(--font-mono);font-size:.72rem;font-weight:600;
-  color:var(--sm-cyan);border:1px solid rgba(74,144,192,.4);
-  border-radius:999px;padding:.3em .9em;white-space:nowrap;
+html.light .ws-slide.active{box-shadow:0 30px 70px rgba(36,77,135,.28),0 8px 22px rgba(36,77,135,.15)}
+.ws-slide:not(.active):hover{opacity:.7;transform:scale(.88)}
+.ws-cat{
+  position:absolute;bottom:.9rem;inset-inline-start:.9rem;z-index:2;
+  font-size:.8rem;font-weight:600;color:#fff;
+  background:rgba(10,10,10,.55);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;padding:.3em 1em;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .4s var(--ease),transform .4s var(--ease);
 }
-html.light .work-card:hover{box-shadow:0 18px 44px rgba(36,77,135,.14)}
+.ws-slide.active .ws-cat{opacity:1;transform:none}
+.ws-nav{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line-strong);
+  background:rgba(10,10,10,.5);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:var(--sm-white);display:grid;place-items:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  transition:color .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease);
+}
+html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(36,77,135,.18)}
+.ws-nav:hover{color:var(--sm-orange);border-color:var(--sm-orange);transform:translateY(-50%) scale(1.08)}
+.ws-nav svg{width:20px;height:20px}
+.ws-prev{inset-inline-start:6px}
+.ws-next{inset-inline-end:6px}
+[dir="rtl"] .ws-nav svg{transform:scaleX(-1)}
+.ws-dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.6rem}
+.ws-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--line-strong);
+  transition:background .25s var(--ease),transform .25s var(--ease);
+}
+.ws-dot.active{background:var(--sm-orange);transform:scale(1.35)}
 
 /* ============================================================
    Process — from idea to operation
@@ -675,7 +701,6 @@ body.en .cta-small{letter-spacing:.05em}
    ============================================================ */
 @media (max-width:1080px){
   .grid{grid-template-columns:repeat(2,1fr)}
-  .work-grid{grid-template-columns:repeat(2,1fr)}
   .why-grid{grid-template-columns:repeat(2,1fr);row-gap:2rem}
   .steps{grid-template-columns:repeat(2,1fr);row-gap:2.2rem}
 }
@@ -697,7 +722,8 @@ body.en .cta-small{letter-spacing:.05em}
   .burger{display:block}
   .nav-cta{display:none}
   .grid{grid-template-columns:1fr}
-  .work-grid{grid-template-columns:1fr}
+  .ws-slide{flex-basis:78%;aspect-ratio:4/5}
+  .ws-nav{width:40px;height:40px}
   .card-featured{padding:1.8rem 1.5rem}
   .steps{grid-template-columns:1fr;gap:0}
   .step{
@@ -766,6 +792,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   .ticker{overflow-x:auto}
   .ticker-track{animation:none}
   .rv{opacity:1;transform:none;transition:none}
+  .ws-track,.ws-slide{transition:none}
   .btn,.card,.f-item,.wa-fab{transition:none}
 }
 </style>
@@ -1096,8 +1123,19 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <button class="wf-btn" data-filter="interior" data-ar="تصميم داخلي" data-en="Interior design">تصميم داخلي</button>
       </div>
 
-      <!-- الصور من مجلد work experience — أضف بطاقة جديدة لكل عمل جديد -->
-      <div class="work-grid" id="work-grid"></div>
+      <!-- الصور من مجلد work experience — أضف عملاً جديداً من قائمة WORK في السكربت -->
+      <div class="work-slider rv">
+        <button class="ws-nav ws-prev" id="ws-prev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+        </button>
+        <div class="ws-viewport" id="ws-viewport">
+          <div class="ws-track" id="ws-track"></div>
+        </div>
+        <button class="ws-nav ws-next" id="ws-next" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <div class="ws-dots" id="ws-dots"></div>
+      </div>
     </div>
   </section>
 
@@ -1418,34 +1456,91 @@ const WORK_CATS = {
   graphic:  { ar: "تصاميم جرافيك", en: "Graphic design" },
   interior: { ar: "تصميم داخلي",   en: "Interior design" }
 };
-const workGrid = document.getElementById("work-grid");
-WORK.forEach(([src, cat])=>{
-  const c = WORK_CATS[cat];
-  const card = document.createElement("article");
-  card.className = "work-card rv";
-  card.dataset.cat = cat;
-  card.innerHTML =
-    '<div class="work-media"><img loading="lazy" alt=""></div>' +
-    '<div class="work-info"><h3 data-ar="' + c.ar + '" data-en="' + c.en + '">' + c[lang] + '</h3></div>';
-  const img = card.querySelector("img");
-  img.src = src;
-  img.alt = c.en;
-  workGrid.appendChild(card);
-});
+/* focus slider engine */
+const wsViewport = document.getElementById("ws-viewport");
+const wsTrack = document.getElementById("ws-track");
+const wsDots = document.getElementById("ws-dots");
+let wsSlides = [], wsIdx = 0, wsTimer = null;
 
+function wsCenter(i, animate = true){
+  if (!wsSlides.length) return;
+  wsIdx = (i + wsSlides.length) % wsSlides.length;
+  wsSlides.forEach((s, j)=> s.classList.toggle("active", j === wsIdx));
+  [...wsDots.children].forEach((d, j)=> d.classList.toggle("active", j === wsIdx));
+  const s = wsSlides[wsIdx];
+  const tx = wsViewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+  if (!animate) wsTrack.style.transition = "none";
+  wsTrack.style.transform = "translateX(" + tx + "px)";
+  if (!animate){ void wsTrack.offsetWidth; wsTrack.style.transition = ""; }
+}
+function wsPlay(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  clearInterval(wsTimer);
+  wsTimer = setInterval(()=> wsCenter(wsIdx + 1), 3800);
+}
+function buildSlider(cat){
+  wsTrack.innerHTML = ""; wsDots.innerHTML = "";
+  WORK.forEach(([src, c])=>{
+    if (cat !== "all" && c !== cat) return;
+    const cc = WORK_CATS[c];
+    const fig = document.createElement("figure");
+    fig.className = "ws-slide";
+    fig.innerHTML = '<img loading="lazy"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
+    const img = fig.querySelector("img");
+    img.src = src; img.alt = cc.en;
+    const i = wsTrack.children.length;
+    fig.addEventListener("click", ()=>{ wsCenter(i); wsPlay(); });
+    wsTrack.appendChild(fig);
+    const dot = document.createElement("button");
+    dot.className = "ws-dot";
+    dot.setAttribute("aria-label", "Slide " + (i + 1));
+    dot.addEventListener("click", ()=>{ wsCenter(i); wsPlay(); });
+    wsDots.appendChild(dot);
+  });
+  wsSlides = [...wsTrack.children];
+  requestAnimationFrame(()=> wsCenter(0, false));
+  wsPlay();
+}
+document.getElementById("ws-prev").addEventListener("click", ()=>{ wsCenter(wsIdx - 1); wsPlay(); });
+document.getElementById("ws-next").addEventListener("click", ()=>{ wsCenter(wsIdx + 1); wsPlay(); });
+
+/* swipe / drag */
+let wsDownX = null, wsDragged = false;
+wsViewport.addEventListener("pointerdown", e=>{
+  wsDownX = e.clientX;
+  wsDragged = false;
+  wsViewport.classList.add("dragging");
+  clearInterval(wsTimer);
+});
+addEventListener("pointerup", e=>{
+  if (wsDownX === null) return;
+  const dx = e.clientX - wsDownX;
+  wsDownX = null;
+  wsViewport.classList.remove("dragging");
+  if (Math.abs(dx) > 40){
+    wsDragged = true;
+    const rtl = document.documentElement.dir === "rtl";
+    const step = (dx < 0 ? 1 : -1) * (rtl ? -1 : 1);
+    wsCenter(wsIdx + step);
+  }
+  wsPlay();
+});
+/* a swipe must not also count as a tap on a slide */
+wsViewport.addEventListener("click", e=>{
+  if (wsDragged){ e.stopPropagation(); e.preventDefault(); wsDragged = false; }
+}, true);
+wsViewport.addEventListener("mouseenter", ()=> clearInterval(wsTimer));
+wsViewport.addEventListener("mouseleave", wsPlay);
+addEventListener("resize", ()=> wsCenter(wsIdx, false));
+
+/* category buttons rebuild the slider */
 const wfBtns = document.querySelectorAll(".wf-btn");
-const workCards = document.querySelectorAll(".work-card");
 wfBtns.forEach(btn=> btn.addEventListener("click", ()=>{
   wfBtns.forEach(b=> b.classList.remove("active"));
   btn.classList.add("active");
-  const f = btn.dataset.filter;
-  workCards.forEach(card=>{
-    const show = f === "all" || card.dataset.cat === f;
-    card.classList.toggle("hide", !show);
-    card.classList.remove("pop");
-    if (show){ void card.offsetWidth; card.classList.add("pop"); }
-  });
+  buildSlider(btn.dataset.filter);
 }));
+buildSlider("all");
 
 /* ---------- mobile menu ---------- */
 const burger = document.getElementById("burger");
