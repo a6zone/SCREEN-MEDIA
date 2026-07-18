@@ -436,7 +436,15 @@ body.en .kicker{letter-spacing:.06em}
 /* ============================================================
    Work — filterable portfolio
    ============================================================ */
-.work-filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.2rem}
+.work-filters{
+  display:flex;flex-wrap:nowrap;gap:.6rem;margin-bottom:2.2rem;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  padding-bottom:4px;cursor:grab;
+}
+.work-filters::-webkit-scrollbar{display:none}
+.work-filters.dragging{cursor:grabbing}
+.wf-btn{flex-shrink:0}
 .wf-btn{
   font-weight:600;font-size:.92rem;color:var(--muted);
   border:1px solid var(--line-strong);border-radius:999px;
@@ -462,27 +470,24 @@ body.en .kicker{letter-spacing:.06em}
   aspect-ratio:4/3;border-radius:calc(var(--radius) + 6px);overflow:hidden;
   background:var(--panel);border:1px solid var(--line);
   transform:scale(.84);opacity:.4;filter:saturate(.75);
-  transition:transform .6s var(--ease),opacity .6s var(--ease),filter .6s var(--ease),box-shadow .6s var(--ease);
+  transition:transform .6s var(--ease),opacity .6s var(--ease),filter .6s var(--ease);
   cursor:pointer;user-select:none;
 }
 .ws-slide img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-.ws-slide.active{
-  transform:scale(1);opacity:1;filter:none;cursor:default;
-  box-shadow:0 34px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.35);
-}
-html.light .ws-slide.active{box-shadow:0 30px 70px rgba(36,77,135,.28),0 8px 22px rgba(36,77,135,.15)}
+.ws-slide.active{transform:scale(1);opacity:1;filter:none;cursor:zoom-in}
 .ws-slide:not(.active):hover{opacity:.7;transform:scale(.88)}
+/* glass tag — frosted band that fades upward */
 .ws-cat{
-  position:absolute;bottom:.9rem;inset-inline-start:.9rem;z-index:2;
-  font-size:.8rem;font-weight:600;color:#fff;
-  background:rgba(10,10,10,.55);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;padding:.3em 1em;
-  opacity:0;transform:translateY(6px);
-  transition:opacity .4s var(--ease),transform .4s var(--ease);
+  position:absolute;inset-inline:0;bottom:0;z-index:2;
+  padding:2.4rem 1.15rem .8rem;
+  font-size:.85rem;font-weight:600;color:#fff;
+  letter-spacing:.01em;text-shadow:0 1px 8px rgba(0,0,0,.35);
+  background:linear-gradient(to top,rgba(12,14,18,.6) 0%,rgba(12,14,18,.25) 55%,transparent 100%);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-mask-image:linear-gradient(to top,#000 45%,transparent 100%);
+  mask-image:linear-gradient(to top,#000 45%,transparent 100%);
+  pointer-events:none;
 }
-.ws-slide.active .ws-cat{opacity:1;transform:none}
 .ws-nav{
   position:absolute;top:50%;transform:translateY(-50%);z-index:5;
   width:46px;height:46px;border-radius:50%;
@@ -506,6 +511,38 @@ html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(3
   transition:background .25s var(--ease),transform .25s var(--ease);
 }
 .ws-dot.active{background:var(--sm-orange);transform:scale(1.35)}
+
+/* lightbox */
+.lightbox{
+  position:fixed;inset:0;z-index:300;
+  display:grid;place-items:center;padding:24px;
+  background:rgba(6,8,10,.82);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  opacity:0;pointer-events:none;
+  transition:opacity .3s var(--ease);
+}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{
+  max-width:min(92vw,1100px);max-height:80vh;
+  border-radius:18px;display:block;
+  transform:scale(.94);transition:transform .35s var(--ease);
+}
+.lightbox.open img{transform:none}
+.lb-close{
+  position:absolute;top:18px;inset-inline-end:18px;z-index:2;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  color:#fff;display:grid;place-items:center;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.lb-close:hover{background:rgba(255,255,255,.22);transform:scale(1.06)}
+.lb-close svg{width:18px;height:18px}
+.lb-cap{
+  position:absolute;bottom:26px;inset-inline:0;text-align:center;
+  color:#fff;font-weight:600;font-size:.95rem;
+  text-shadow:0 1px 10px rgba(0,0,0,.5);
+}
 
 /* ============================================================
    Process — from idea to operation
@@ -1343,6 +1380,15 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   </div>
 </footer>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lb-close" id="lb-close" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+  <img id="lb-img" alt="">
+  <p class="lb-cap" id="lb-cap"></p>
+</div>
+
 <!-- WhatsApp FAB -->
 <a class="wa-fab" data-wa href="#contact" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
@@ -1456,90 +1502,156 @@ const WORK_CATS = {
   graphic:  { ar: "تصاميم جرافيك", en: "Graphic design" },
   interior: { ar: "تصميم داخلي",   en: "Interior design" }
 };
-/* focus slider engine */
+/* focus slider engine — infinite loop, live drag, lightbox */
 const wsViewport = document.getElementById("ws-viewport");
 const wsTrack = document.getElementById("ws-track");
 const wsDots = document.getElementById("ws-dots");
-let wsSlides = [], wsIdx = 0, wsTimer = null;
+let wsSlides = [], wsIdx = 0, wsTimer = null, wsTx = 0, wsN = 0, wsBase = 0;
 
-function wsCenter(i, animate = true){
-  if (!wsSlides.length) return;
-  wsIdx = (i + wsSlides.length) % wsSlides.length;
-  wsSlides.forEach((s, j)=> s.classList.toggle("active", j === wsIdx));
-  [...wsDots.children].forEach((d, j)=> d.classList.toggle("active", j === wsIdx));
+function wsApply(animate){
   const s = wsSlides[wsIdx];
-  const tx = wsViewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
+  wsTx = wsViewport.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
   if (!animate) wsTrack.style.transition = "none";
-  wsTrack.style.transform = "translateX(" + tx + "px)";
+  wsTrack.style.transform = "translateX(" + wsTx + "px)";
   if (!animate){ void wsTrack.offsetWidth; wsTrack.style.transition = ""; }
 }
+function wsCenter(i, animate = true){
+  if (!wsSlides.length) return;
+  wsIdx = Math.max(0, Math.min(i, wsSlides.length - 1));
+  const orig = ((wsIdx - wsBase) % wsN + wsN) % wsN;
+  wsSlides.forEach((s, j)=> s.classList.toggle("active", j === wsIdx));
+  [...wsDots.children].forEach((d, j)=> d.classList.toggle("active", j === orig));
+  wsApply(animate);
+}
+/* after each glide, silently re-centre into the middle copy so the
+   loop never reaches an end — this is what makes it infinite */
+wsTrack.addEventListener("transitionend", e=>{
+  if (e.target !== wsTrack || e.propertyName !== "transform") return;
+  if (wsIdx < wsBase || wsIdx >= wsBase + wsN){
+    const orig = ((wsIdx - wsBase) % wsN + wsN) % wsN;
+    wsCenter(wsBase + orig, false);
+  }
+});
 function wsPlay(){
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   clearInterval(wsTimer);
   wsTimer = setInterval(()=> wsCenter(wsIdx + 1), 3800);
 }
+function openLightbox(src, label){
+  const lb = document.getElementById("lightbox");
+  document.getElementById("lb-img").src = src;
+  document.getElementById("lb-cap").textContent = label;
+  lb.classList.add("open");
+  clearInterval(wsTimer);
+}
+function closeLightbox(){
+  document.getElementById("lightbox").classList.remove("open");
+  wsPlay();
+}
+document.getElementById("lb-close").addEventListener("click", closeLightbox);
+document.getElementById("lightbox").addEventListener("click", e=>{
+  if (e.target.id !== "lb-img") closeLightbox();
+});
+addEventListener("keydown", e=>{ if (e.key === "Escape") closeLightbox(); });
+
 function buildSlider(cat){
   wsTrack.innerHTML = ""; wsDots.innerHTML = "";
-  WORK.forEach(([src, c])=>{
-    if (cat !== "all" && c !== cat) return;
-    const cc = WORK_CATS[c];
-    const fig = document.createElement("figure");
-    fig.className = "ws-slide";
-    fig.innerHTML = '<img loading="lazy"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
-    const img = fig.querySelector("img");
-    img.src = src; img.alt = cc.en;
-    const i = wsTrack.children.length;
-    fig.addEventListener("click", ()=>{ wsCenter(i); wsPlay(); });
-    wsTrack.appendChild(fig);
+  const items = WORK.filter(([, c])=> cat === "all" || c === cat);
+  wsN = items.length;
+  const reps = Math.max(3, Math.ceil(9 / wsN));
+  wsBase = Math.floor(reps / 2) * wsN;
+  for (let r = 0; r < reps; r++){
+    items.forEach(([src, c])=>{
+      const cc = WORK_CATS[c];
+      const fig = document.createElement("figure");
+      fig.className = "ws-slide";
+      fig.innerHTML = '<img loading="lazy"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
+      const img = fig.querySelector("img");
+      img.src = src; img.alt = cc.en;
+      const gi = wsTrack.children.length;
+      fig.addEventListener("click", ()=>{
+        if (gi === wsIdx){ openLightbox(src, cc[lang]); }
+        else { wsCenter(gi); wsPlay(); }
+      });
+      wsTrack.appendChild(fig);
+    });
+  }
+  items.forEach((_, i)=>{
     const dot = document.createElement("button");
     dot.className = "ws-dot";
     dot.setAttribute("aria-label", "Slide " + (i + 1));
-    dot.addEventListener("click", ()=>{ wsCenter(i); wsPlay(); });
+    dot.addEventListener("click", ()=>{ wsCenter(wsBase + i); wsPlay(); });
     wsDots.appendChild(dot);
   });
   wsSlides = [...wsTrack.children];
-  requestAnimationFrame(()=> wsCenter(0, false));
+  requestAnimationFrame(()=> wsCenter(wsBase, false));
   wsPlay();
 }
 document.getElementById("ws-prev").addEventListener("click", ()=>{ wsCenter(wsIdx - 1); wsPlay(); });
 document.getElementById("ws-next").addEventListener("click", ()=>{ wsCenter(wsIdx + 1); wsPlay(); });
 
-/* swipe / drag */
-let wsDownX = null, wsDragged = false;
+/* live drag — the track follows the pointer, then snaps to the nearest card */
+let wsDownX = null, wsStartTx = 0, wsDragged = false;
 wsViewport.addEventListener("pointerdown", e=>{
-  wsDownX = e.clientX;
-  wsDragged = false;
+  wsDownX = e.clientX; wsStartTx = wsTx; wsDragged = false;
   wsViewport.classList.add("dragging");
+  wsTrack.style.transition = "none";
   clearInterval(wsTimer);
+});
+addEventListener("pointermove", e=>{
+  if (wsDownX === null) return;
+  const dx = e.clientX - wsDownX;
+  if (Math.abs(dx) > 8) wsDragged = true;
+  wsTrack.style.transform = "translateX(" + (wsStartTx + dx) + "px)";
 });
 addEventListener("pointerup", e=>{
   if (wsDownX === null) return;
   const dx = e.clientX - wsDownX;
   wsDownX = null;
   wsViewport.classList.remove("dragging");
-  if (Math.abs(dx) > 40){
-    wsDragged = true;
-    const rtl = document.documentElement.dir === "rtl";
-    const step = (dx < 0 ? 1 : -1) * (rtl ? -1 : 1);
-    wsCenter(wsIdx + step);
+  wsTrack.style.transition = "";
+  if (wsDragged){
+    /* snap to whichever card is now nearest the centre */
+    const centerInTrack = wsViewport.clientWidth / 2 - (wsStartTx + dx);
+    let best = wsIdx, bd = Infinity;
+    wsSlides.forEach((s, j)=>{
+      const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - centerInTrack);
+      if (d < bd){ bd = d; best = j; }
+    });
+    wsCenter(best);
+  } else {
+    wsTrack.style.transform = "translateX(" + wsTx + "px)";
   }
   wsPlay();
 });
-/* a swipe must not also count as a tap on a slide */
+/* a drag must not also count as a tap on a slide */
 wsViewport.addEventListener("click", e=>{
   if (wsDragged){ e.stopPropagation(); e.preventDefault(); wsDragged = false; }
 }, true);
 wsViewport.addEventListener("mouseenter", ()=> clearInterval(wsTimer));
-wsViewport.addEventListener("mouseleave", wsPlay);
+wsViewport.addEventListener("mouseleave", ()=>{
+  if (!document.getElementById("lightbox").classList.contains("open")) wsPlay();
+});
 addEventListener("resize", ()=> wsCenter(wsIdx, false));
 
-/* category buttons rebuild the slider */
+/* category buttons rebuild the slider; the button row itself drags/scrolls */
 const wfBtns = document.querySelectorAll(".wf-btn");
 wfBtns.forEach(btn=> btn.addEventListener("click", ()=>{
   wfBtns.forEach(b=> b.classList.remove("active"));
   btn.classList.add("active");
   buildSlider(btn.dataset.filter);
 }));
+const wfRow = document.querySelector(".work-filters");
+let wfDownX = null, wfStart = 0, wfMoved = false;
+wfRow.addEventListener("pointerdown", e=>{ wfDownX = e.clientX; wfStart = wfRow.scrollLeft; wfMoved = false; wfRow.classList.add("dragging"); });
+addEventListener("pointermove", e=>{
+  if (wfDownX === null) return;
+  const dx = e.clientX - wfDownX;
+  if (Math.abs(dx) > 6) wfMoved = true;
+  wfRow.scrollLeft = wfStart - dx;
+});
+addEventListener("pointerup", ()=>{ wfDownX = null; wfRow.classList.remove("dragging"); });
+wfRow.addEventListener("click", e=>{ if (wfMoved){ e.stopPropagation(); e.preventDefault(); wfMoved = false; } }, true);
 buildSlider("all");
 
 /* ---------- mobile menu ---------- */
