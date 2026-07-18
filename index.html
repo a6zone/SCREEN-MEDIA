@@ -1089,79 +1089,15 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
       <div class="work-filters rv" role="tablist" aria-label="Work categories">
         <button class="wf-btn active" data-filter="all" data-ar="الكل" data-en="All">الكل</button>
-        <button class="wf-btn" data-filter="signage" data-ar="لوحات" data-en="Signage">لوحات</button>
-        <button class="wf-btn" data-filter="boxes" data-ar="بوكسات وتغليف" data-en="Boxes &amp; packaging">بوكسات وتغليف</button>
-        <button class="wf-btn" data-filter="identity" data-ar="هوية وشعارات" data-en="Logos &amp; identity">هوية وشعارات</button>
+        <button class="wf-btn" data-filter="panels" data-ar="لوحات خارجية" data-en="External panels">لوحات خارجية</button>
+        <button class="wf-btn" data-filter="boxes" data-ar="بوكسات" data-en="Boxes">بوكسات</button>
+        <button class="wf-btn" data-filter="logo" data-ar="شعارات" data-en="Logos">شعارات</button>
+        <button class="wf-btn" data-filter="graphic" data-ar="تصاميم جرافيك" data-en="Graphic design">تصاميم جرافيك</button>
+        <button class="wf-btn" data-filter="interior" data-ar="تصميم داخلي" data-en="Interior design">تصميم داخلي</button>
       </div>
 
-      <!-- EDIT: ضع صور الأعمال داخل مجلد assets/work بنفس الأسماء التالية -->
-      <div class="work-grid">
-        <article class="work-card rv" data-cat="signage">
-          <div class="work-media">
-            <span class="work-ph">MIAMI FRIES</span>
-            <img src="assets/work/miami-fries.jpg" alt="Miami Fries — neon sign" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="ميامي فرايز — لوحة نيون" data-en="Miami Fries — neon sign">ميامي فرايز — لوحة نيون</h3>
-            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
-          </div>
-        </article>
-
-        <article class="work-card rv" data-cat="signage">
-          <div class="work-media">
-            <span class="work-ph">شوايه لوميه</span>
-            <img src="assets/work/lumeh-sign.jpg" alt="Lumeh Grill — storefront sign" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="شوايه لوميه — لوحة محل" data-en="Lumeh Grill — shop sign">شوايه لوميه — لوحة محل</h3>
-            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
-          </div>
-        </article>
-
-        <article class="work-card rv" data-cat="signage">
-          <div class="work-media">
-            <span class="work-ph">CASE CLOSED</span>
-            <img src="assets/work/case-closed.jpg" alt="Case Closed Burger — neon signage" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="كيس كلوزد — واجهة نيون" data-en="Case Closed — neon façade">كيس كلوزد — واجهة نيون</h3>
-            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
-          </div>
-        </article>
-
-        <article class="work-card rv" data-cat="boxes">
-          <div class="work-media">
-            <span class="work-ph" data-ar="بوكس مطعم" data-en="RESTAURANT BOX">بوكس مطعم</span>
-            <img src="assets/work/orange-box.jpg" alt="Restaurant box packaging design" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="تصميم بوكس مطعم" data-en="Restaurant box design">تصميم بوكس مطعم</h3>
-            <span class="work-tag" data-ar="تغليف" data-en="PACKAGING">تغليف</span>
-          </div>
-        </article>
-
-        <article class="work-card rv" data-cat="boxes">
-          <div class="work-media">
-            <span class="work-ph">MIAMI FRIES</span>
-            <img src="assets/work/miami-cups.jpg" alt="Miami Fries — printed cups" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="ميامي فرايز — أكواب مطبوعة" data-en="Miami Fries — printed cups">ميامي فرايز — أكواب مطبوعة</h3>
-            <span class="work-tag" data-ar="تغليف" data-en="PACKAGING">تغليف</span>
-          </div>
-        </article>
-
-        <article class="work-card rv" data-cat="identity">
-          <div class="work-media">
-            <span class="work-ph">POK POK</span>
-            <img src="assets/work/pokpok-identity.jpg" alt="Pok Pok Brosted — brand identity" loading="lazy" onerror="this.remove()">
-          </div>
-          <div class="work-info">
-            <h3 data-ar="بوك بوك بروستد — هوية كاملة" data-en="Pok Pok Brosted — full identity">بوك بوك بروستد — هوية كاملة</h3>
-            <span class="work-tag" data-ar="هوية" data-en="IDENTITY">هوية</span>
-          </div>
-        </article>
-      </div>
+      <!-- الصور من مجلد work experience — أضف بطاقة جديدة لكل عمل جديد -->
+      <div class="work-grid" id="work-grid"></div>
     </div>
   </section>
 
@@ -1455,7 +1391,48 @@ themeToggle.addEventListener("click", ()=>{
   try{ localStorage.setItem("sm-theme", t); }catch(e){}
 });
 
-/* ---------- work portfolio filters ---------- */
+/* ---------- work portfolio ----------
+   EDIT HERE: أضف عملاً جديداً بسطر واحد — ضع الصورة في مجلد
+   "work experience" ثم أضف [المسار, التصنيف] هنا.
+   Categories: panels | boxes | logo | graphic | interior */
+const WORK = [
+  ["work experience/External panels/External_panels_01.jpeg", "panels"],
+  ["work experience/External panels/External_panels_02.jpeg", "panels"],
+  ["work experience/External panels/External_panels_03.jpeg", "panels"],
+  ["work experience/Boxes/Boxes_01.jpeg",                     "boxes"],
+  ["work experience/Boxes/Boxes_02.jpeg",                     "boxes"],
+  ["work experience/Logo/Logo_01.jpeg",                       "logo"],
+  ["work experience/Logo/Logo_02.jpeg",                       "logo"],
+  ["work experience/Logo/Logo_03.jpeg",                       "logo"],
+  ["work experience/graphic design/graphic_design_01.jpeg",   "graphic"],
+  ["work experience/graphic design/graphic_design_02.jpeg",   "graphic"],
+  ["work experience/graphic design/graphic_design_03.jpeg",   "graphic"],
+  ["work experience/interior design/interior_design_01.jpeg", "interior"],
+  ["work experience/interior design/interior_design_02.jpeg", "interior"],
+  ["work experience/interior design/interior_design_03.jpeg", "interior"]
+];
+const WORK_CATS = {
+  panels:   { ar: "لوحات خارجية",  en: "External panels" },
+  boxes:    { ar: "بوكسات",       en: "Boxes" },
+  logo:     { ar: "شعارات",       en: "Logos" },
+  graphic:  { ar: "تصاميم جرافيك", en: "Graphic design" },
+  interior: { ar: "تصميم داخلي",   en: "Interior design" }
+};
+const workGrid = document.getElementById("work-grid");
+WORK.forEach(([src, cat])=>{
+  const c = WORK_CATS[cat];
+  const card = document.createElement("article");
+  card.className = "work-card rv";
+  card.dataset.cat = cat;
+  card.innerHTML =
+    '<div class="work-media"><img loading="lazy" alt=""></div>' +
+    '<div class="work-info"><h3 data-ar="' + c.ar + '" data-en="' + c.en + '">' + c[lang] + '</h3></div>';
+  const img = card.querySelector("img");
+  img.src = src;
+  img.alt = c.en;
+  workGrid.appendChild(card);
+});
+
 const wfBtns = document.querySelectorAll(".wf-btn");
 const workCards = document.querySelectorAll(".work-card");
 wfBtns.forEach(btn=> btn.addEventListener("click", ()=>{
