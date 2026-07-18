@@ -434,6 +434,54 @@ body.en .kicker{letter-spacing:.06em}
 .cf-cta{flex-shrink:0}
 
 /* ============================================================
+   Work — filterable portfolio
+   ============================================================ */
+.work-filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.2rem}
+.wf-btn{
+  font-weight:600;font-size:.92rem;color:var(--muted);
+  border:1px solid var(--line-strong);border-radius:999px;
+  padding:.45em 1.35em;
+  transition:color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease);
+}
+.wf-btn:hover{color:var(--sm-orange);border-color:rgba(242,149,31,.5)}
+.wf-btn.active{
+  background:linear-gradient(180deg,var(--sm-orange),#E38A15);
+  color:#141008;border-color:transparent;
+}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.work-card{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  transition:transform .28s var(--ease),border-color .28s var(--ease),box-shadow .28s var(--ease);
+}
+.work-card:hover{transform:translateY(-5px);border-color:rgba(242,149,31,.45);box-shadow:0 18px 44px rgba(0,0,0,.35)}
+.work-card.hide{display:none}
+@keyframes workIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.work-card.pop{animation:workIn .4s var(--ease)}
+.work-media{
+  position:relative;aspect-ratio:4/3;overflow:hidden;
+  background:
+    radial-gradient(70% 90% at 30% 20%,rgba(36,77,135,.5),transparent 70%),
+    linear-gradient(150deg,var(--panel-2),var(--panel));
+}
+.work-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
+.work-card:hover .work-media img{transform:scale(1.06)}
+.work-ph{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:800;font-size:1.6rem;
+  color:rgba(156,190,215,.4);text-align:center;padding:1rem;
+}
+.work-media img{position:relative;z-index:1}
+.work-info{padding:1.05rem 1.25rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.work-info h3{font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.5}
+.work-tag{
+  flex-shrink:0;font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+  color:var(--sm-cyan);border:1px solid rgba(74,144,192,.4);
+  border-radius:999px;padding:.3em .9em;white-space:nowrap;
+}
+html.light .work-card:hover{box-shadow:0 18px 44px rgba(36,77,135,.14)}
+
+/* ============================================================
    Process — from idea to operation
    ============================================================ */
 .steps{
@@ -627,6 +675,7 @@ body.en .cta-small{letter-spacing:.05em}
    ============================================================ */
 @media (max-width:1080px){
   .grid{grid-template-columns:repeat(2,1fr)}
+  .work-grid{grid-template-columns:repeat(2,1fr)}
   .why-grid{grid-template-columns:repeat(2,1fr);row-gap:2rem}
   .steps{grid-template-columns:repeat(2,1fr);row-gap:2.2rem}
 }
@@ -648,6 +697,7 @@ body.en .cta-small{letter-spacing:.05em}
   .burger{display:block}
   .nav-cta{display:none}
   .grid{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr}
   .card-featured{padding:1.8rem 1.5rem}
   .steps{grid-template-columns:1fr;gap:0}
   .step{
@@ -747,6 +797,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
     <nav class="nav-links" id="nav-links" aria-label="Main">
       <a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a>
+      <a href="#work" data-ar="أعمالنا" data-en="Our work">أعمالنا</a>
       <a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a>
       <a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a>
       <a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a>
@@ -1027,6 +1078,29 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
     </div>
   </section>
 
+  <!-- ============================ WORK ============================ -->
+  <section class="section" id="work">
+    <div class="container">
+      <div class="section-head rv">
+        <p class="kicker" data-ar="أعمالنا" data-en="OUR WORK">أعمالنا</p>
+        <h2 data-ar="نماذج من أعمال عملائنا" data-en="A sample of our client work">نماذج من أعمال عملائنا</h2>
+        <p class="sub" data-ar="اختر نوع العمل لعرض الأمثلة المشابهة." data-en="Pick a category to see similar examples.">اختر نوع العمل لعرض الأمثلة المشابهة.</p>
+      </div>
+
+      <div class="work-filters rv" role="tablist" aria-label="Work categories">
+        <button class="wf-btn active" data-filter="all" data-ar="الكل" data-en="All">الكل</button>
+        <button class="wf-btn" data-filter="panels" data-ar="لوحات خارجية" data-en="External panels">لوحات خارجية</button>
+        <button class="wf-btn" data-filter="boxes" data-ar="بوكسات" data-en="Boxes">بوكسات</button>
+        <button class="wf-btn" data-filter="logo" data-ar="شعارات" data-en="Logos">شعارات</button>
+        <button class="wf-btn" data-filter="graphic" data-ar="تصاميم جرافيك" data-en="Graphic design">تصاميم جرافيك</button>
+        <button class="wf-btn" data-filter="interior" data-ar="تصميم داخلي" data-en="Interior design">تصميم داخلي</button>
+      </div>
+
+      <!-- الصور من مجلد work experience — أضف بطاقة جديدة لكل عمل جديد -->
+      <div class="work-grid" id="work-grid"></div>
+    </div>
+  </section>
+
   <!-- ============================ PROCESS ============================ -->
   <section class="section" id="process">
     <div class="container">
@@ -1197,6 +1271,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <h4 data-ar="روابط سريعة" data-en="Quick links">روابط سريعة</h4>
         <ul>
           <li><a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a></li>
+          <li><a href="#work" data-ar="أعمالنا" data-en="Our work">أعمالنا</a></li>
           <li><a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a></li>
           <li><a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a></li>
           <li><a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a></li>
@@ -1209,11 +1284,11 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <ul>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <a data-tel data-phone-label dir="ltr" href="#contact">+966 50 737 9809</a>
+            <a data-tel data-phone-label dir="ltr" href="#contact">++966 54 921 9794</a>
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg>
-            <a data-email dir="ltr" href="#contact">info@screenmedia.sa</a>
+            <a data-email dir="ltr" href="#contact">Screen.Media2026@gmail.com</a>
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
@@ -1241,10 +1316,10 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
    Put the real WhatsApp number (no +, no spaces), phone & email.
    ============================================================ */
 const CONTACT = {
-  wa:    "966507379809",          /* WhatsApp: 9665XXXXXXXX */
-  tel:   "+966507379809",         /* phone for tel: links   */
-  telLabel: "+966 50 737 9809",   /* phone as displayed     */
-  email: "info@screenmedia.sa"
+  wa:    "966549219794",          /* WhatsApp: 9665XXXXXXXX */
+  tel:   "+966549219794",         /* phone for tel: links   */
+  telLabel: "+966 54 921 9794",   /* phone as displayed     */
+  email: "Screen.Media2026@gmail.com"
 };
 const DEFAULT_WA_MSG = {
   ar: "مرحباً سكرين ميديا! أرغب بالاستفسار عن خدماتكم.",
@@ -1315,6 +1390,62 @@ themeToggle.addEventListener("click", ()=>{
   setTheme(t);
   try{ localStorage.setItem("sm-theme", t); }catch(e){}
 });
+
+/* ---------- work portfolio ----------
+   EDIT HERE: أضف عملاً جديداً بسطر واحد — ضع الصورة في مجلد
+   "work experience" ثم أضف [المسار, التصنيف] هنا.
+   Categories: panels | boxes | logo | graphic | interior */
+const WORK = [
+  ["work experience/External panels/External_panels_01.jpeg", "panels"],
+  ["work experience/External panels/External_panels_02.jpeg", "panels"],
+  ["work experience/External panels/External_panels_03.jpeg", "panels"],
+  ["work experience/Boxes/Boxes_01.jpeg",                     "boxes"],
+  ["work experience/Boxes/Boxes_02.jpeg",                     "boxes"],
+  ["work experience/Logo/Logo_01.jpeg",                       "logo"],
+  ["work experience/Logo/Logo_02.jpeg",                       "logo"],
+  ["work experience/Logo/Logo_03.jpeg",                       "logo"],
+  ["work experience/graphic design/graphic_design_01.jpeg",   "graphic"],
+  ["work experience/graphic design/graphic_design_02.jpeg",   "graphic"],
+  ["work experience/graphic design/graphic_design_03.jpeg",   "graphic"],
+  ["work experience/interior design/interior_design_01.jpeg", "interior"],
+  ["work experience/interior design/interior_design_02.jpeg", "interior"],
+  ["work experience/interior design/interior_design_03.jpeg", "interior"]
+];
+const WORK_CATS = {
+  panels:   { ar: "لوحات خارجية",  en: "External panels" },
+  boxes:    { ar: "بوكسات",       en: "Boxes" },
+  logo:     { ar: "شعارات",       en: "Logos" },
+  graphic:  { ar: "تصاميم جرافيك", en: "Graphic design" },
+  interior: { ar: "تصميم داخلي",   en: "Interior design" }
+};
+const workGrid = document.getElementById("work-grid");
+WORK.forEach(([src, cat])=>{
+  const c = WORK_CATS[cat];
+  const card = document.createElement("article");
+  card.className = "work-card rv";
+  card.dataset.cat = cat;
+  card.innerHTML =
+    '<div class="work-media"><img loading="lazy" alt=""></div>' +
+    '<div class="work-info"><h3 data-ar="' + c.ar + '" data-en="' + c.en + '">' + c[lang] + '</h3></div>';
+  const img = card.querySelector("img");
+  img.src = src;
+  img.alt = c.en;
+  workGrid.appendChild(card);
+});
+
+const wfBtns = document.querySelectorAll(".wf-btn");
+const workCards = document.querySelectorAll(".work-card");
+wfBtns.forEach(btn=> btn.addEventListener("click", ()=>{
+  wfBtns.forEach(b=> b.classList.remove("active"));
+  btn.classList.add("active");
+  const f = btn.dataset.filter;
+  workCards.forEach(card=>{
+    const show = f === "all" || card.dataset.cat === f;
+    card.classList.toggle("hide", !show);
+    card.classList.remove("pop");
+    if (show){ void card.offsetWidth; card.classList.add("pop"); }
+  });
+}));
 
 /* ---------- mobile menu ---------- */
 const burger = document.getElementById("burger");
