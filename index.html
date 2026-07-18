@@ -434,6 +434,54 @@ body.en .kicker{letter-spacing:.06em}
 .cf-cta{flex-shrink:0}
 
 /* ============================================================
+   Work — filterable portfolio
+   ============================================================ */
+.work-filters{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.2rem}
+.wf-btn{
+  font-weight:600;font-size:.92rem;color:var(--muted);
+  border:1px solid var(--line-strong);border-radius:999px;
+  padding:.45em 1.35em;
+  transition:color .2s var(--ease),border-color .2s var(--ease),background .2s var(--ease);
+}
+.wf-btn:hover{color:var(--sm-orange);border-color:rgba(242,149,31,.5)}
+.wf-btn.active{
+  background:linear-gradient(180deg,var(--sm-orange),#E38A15);
+  color:#141008;border-color:transparent;
+}
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem}
+.work-card{
+  border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:var(--panel);
+  transition:transform .28s var(--ease),border-color .28s var(--ease),box-shadow .28s var(--ease);
+}
+.work-card:hover{transform:translateY(-5px);border-color:rgba(242,149,31,.45);box-shadow:0 18px 44px rgba(0,0,0,.35)}
+.work-card.hide{display:none}
+@keyframes workIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.work-card.pop{animation:workIn .4s var(--ease)}
+.work-media{
+  position:relative;aspect-ratio:4/3;overflow:hidden;
+  background:
+    radial-gradient(70% 90% at 30% 20%,rgba(36,77,135,.5),transparent 70%),
+    linear-gradient(150deg,var(--panel-2),var(--panel));
+}
+.work-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
+.work-card:hover .work-media img{transform:scale(1.06)}
+.work-ph{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:800;font-size:1.6rem;
+  color:rgba(156,190,215,.4);text-align:center;padding:1rem;
+}
+.work-media img{position:relative;z-index:1}
+.work-info{padding:1.05rem 1.25rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.work-info h3{font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.5}
+.work-tag{
+  flex-shrink:0;font-family:var(--font-mono);font-size:.72rem;font-weight:600;
+  color:var(--sm-cyan);border:1px solid rgba(74,144,192,.4);
+  border-radius:999px;padding:.3em .9em;white-space:nowrap;
+}
+html.light .work-card:hover{box-shadow:0 18px 44px rgba(36,77,135,.14)}
+
+/* ============================================================
    Process — from idea to operation
    ============================================================ */
 .steps{
@@ -627,6 +675,7 @@ body.en .cta-small{letter-spacing:.05em}
    ============================================================ */
 @media (max-width:1080px){
   .grid{grid-template-columns:repeat(2,1fr)}
+  .work-grid{grid-template-columns:repeat(2,1fr)}
   .why-grid{grid-template-columns:repeat(2,1fr);row-gap:2rem}
   .steps{grid-template-columns:repeat(2,1fr);row-gap:2.2rem}
 }
@@ -648,6 +697,7 @@ body.en .cta-small{letter-spacing:.05em}
   .burger{display:block}
   .nav-cta{display:none}
   .grid{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr}
   .card-featured{padding:1.8rem 1.5rem}
   .steps{grid-template-columns:1fr;gap:0}
   .step{
@@ -747,6 +797,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
     <nav class="nav-links" id="nav-links" aria-label="Main">
       <a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a>
+      <a href="#work" data-ar="أعمالنا" data-en="Our work">أعمالنا</a>
       <a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a>
       <a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a>
       <a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a>
@@ -1027,6 +1078,93 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
     </div>
   </section>
 
+  <!-- ============================ WORK ============================ -->
+  <section class="section" id="work">
+    <div class="container">
+      <div class="section-head rv">
+        <p class="kicker" data-ar="أعمالنا" data-en="OUR WORK">أعمالنا</p>
+        <h2 data-ar="نماذج من أعمال عملائنا" data-en="A sample of our client work">نماذج من أعمال عملائنا</h2>
+        <p class="sub" data-ar="اختر نوع العمل لعرض الأمثلة المشابهة." data-en="Pick a category to see similar examples.">اختر نوع العمل لعرض الأمثلة المشابهة.</p>
+      </div>
+
+      <div class="work-filters rv" role="tablist" aria-label="Work categories">
+        <button class="wf-btn active" data-filter="all" data-ar="الكل" data-en="All">الكل</button>
+        <button class="wf-btn" data-filter="signage" data-ar="لوحات" data-en="Signage">لوحات</button>
+        <button class="wf-btn" data-filter="boxes" data-ar="بوكسات وتغليف" data-en="Boxes &amp; packaging">بوكسات وتغليف</button>
+        <button class="wf-btn" data-filter="identity" data-ar="هوية وشعارات" data-en="Logos &amp; identity">هوية وشعارات</button>
+      </div>
+
+      <!-- EDIT: ضع صور الأعمال داخل مجلد assets/work بنفس الأسماء التالية -->
+      <div class="work-grid">
+        <article class="work-card rv" data-cat="signage">
+          <div class="work-media">
+            <span class="work-ph">MIAMI FRIES</span>
+            <img src="assets/work/miami-fries.jpg" alt="Miami Fries — neon sign" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="ميامي فرايز — لوحة نيون" data-en="Miami Fries — neon sign">ميامي فرايز — لوحة نيون</h3>
+            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
+          </div>
+        </article>
+
+        <article class="work-card rv" data-cat="signage">
+          <div class="work-media">
+            <span class="work-ph">شوايه لوميه</span>
+            <img src="assets/work/lumeh-sign.jpg" alt="Lumeh Grill — storefront sign" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="شوايه لوميه — لوحة محل" data-en="Lumeh Grill — shop sign">شوايه لوميه — لوحة محل</h3>
+            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
+          </div>
+        </article>
+
+        <article class="work-card rv" data-cat="signage">
+          <div class="work-media">
+            <span class="work-ph">CASE CLOSED</span>
+            <img src="assets/work/case-closed.jpg" alt="Case Closed Burger — neon signage" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="كيس كلوزد — واجهة نيون" data-en="Case Closed — neon façade">كيس كلوزد — واجهة نيون</h3>
+            <span class="work-tag" data-ar="لوحات" data-en="SIGNAGE">لوحات</span>
+          </div>
+        </article>
+
+        <article class="work-card rv" data-cat="boxes">
+          <div class="work-media">
+            <span class="work-ph" data-ar="بوكس مطعم" data-en="RESTAURANT BOX">بوكس مطعم</span>
+            <img src="assets/work/orange-box.jpg" alt="Restaurant box packaging design" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="تصميم بوكس مطعم" data-en="Restaurant box design">تصميم بوكس مطعم</h3>
+            <span class="work-tag" data-ar="تغليف" data-en="PACKAGING">تغليف</span>
+          </div>
+        </article>
+
+        <article class="work-card rv" data-cat="boxes">
+          <div class="work-media">
+            <span class="work-ph">MIAMI FRIES</span>
+            <img src="assets/work/miami-cups.jpg" alt="Miami Fries — printed cups" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="ميامي فرايز — أكواب مطبوعة" data-en="Miami Fries — printed cups">ميامي فرايز — أكواب مطبوعة</h3>
+            <span class="work-tag" data-ar="تغليف" data-en="PACKAGING">تغليف</span>
+          </div>
+        </article>
+
+        <article class="work-card rv" data-cat="identity">
+          <div class="work-media">
+            <span class="work-ph">POK POK</span>
+            <img src="assets/work/pokpok-identity.jpg" alt="Pok Pok Brosted — brand identity" loading="lazy" onerror="this.remove()">
+          </div>
+          <div class="work-info">
+            <h3 data-ar="بوك بوك بروستد — هوية كاملة" data-en="Pok Pok Brosted — full identity">بوك بوك بروستد — هوية كاملة</h3>
+            <span class="work-tag" data-ar="هوية" data-en="IDENTITY">هوية</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- ============================ PROCESS ============================ -->
   <section class="section" id="process">
     <div class="container">
@@ -1197,6 +1335,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <h4 data-ar="روابط سريعة" data-en="Quick links">روابط سريعة</h4>
         <ul>
           <li><a href="#services" data-ar="خدماتنا" data-en="Services">خدماتنا</a></li>
+          <li><a href="#work" data-ar="أعمالنا" data-en="Our work">أعمالنا</a></li>
           <li><a href="#process" data-ar="كيف نعمل" data-en="How we work">كيف نعمل</a></li>
           <li><a href="#package" data-ar="باكج الافتتاح" data-en="Opening package">باكج الافتتاح</a></li>
           <li><a href="#why" data-ar="لماذا نحن" data-en="Why us">لماذا نحن</a></li>
@@ -1213,7 +1352,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg>
-            <a data-email dir="ltr" href="#contact">info@screenmedia.sa</a>
+            <a data-email dir="ltr" href="#contact">Screen.Media2026@gmail.com</a>
           </li>
           <li class="contact-line">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
@@ -1244,7 +1383,7 @@ const CONTACT = {
   wa:    "966549219794",          /* WhatsApp: 9665XXXXXXXX */
   tel:   "+966549219794",         /* phone for tel: links   */
   telLabel: "+966 54 921 9794",   /* phone as displayed     */
-  email: "info@screenmedia.sa"
+  email: "Screen.Media2026@gmail.com"
 };
 const DEFAULT_WA_MSG = {
   ar: "مرحباً سكرين ميديا! أرغب بالاستفسار عن خدماتكم.",
@@ -1315,6 +1454,21 @@ themeToggle.addEventListener("click", ()=>{
   setTheme(t);
   try{ localStorage.setItem("sm-theme", t); }catch(e){}
 });
+
+/* ---------- work portfolio filters ---------- */
+const wfBtns = document.querySelectorAll(".wf-btn");
+const workCards = document.querySelectorAll(".work-card");
+wfBtns.forEach(btn=> btn.addEventListener("click", ()=>{
+  wfBtns.forEach(b=> b.classList.remove("active"));
+  btn.classList.add("active");
+  const f = btn.dataset.filter;
+  workCards.forEach(card=>{
+    const show = f === "all" || card.dataset.cat === f;
+    card.classList.toggle("hide", !show);
+    card.classList.remove("pop");
+    if (show){ void card.offsetWidth; card.classList.add("pop"); }
+  });
+}));
 
 /* ---------- mobile menu ---------- */
 const burger = document.getElementById("burger");
