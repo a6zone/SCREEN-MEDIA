@@ -287,6 +287,16 @@ body.en .kicker{letter-spacing:.06em}
   margin-block:1.1rem .9rem;
   text-wrap:balance;
 }
+/* typewriter cursor (Aceternity-style) */
+.tw-cursor{
+  display:inline-block;width:4px;height:.85em;border-radius:2px;
+  background:var(--sm-orange);margin-inline:3px;vertical-align:-.06em;
+  box-shadow:0 0 12px rgba(242,149,31,.6);
+  animation:twBlink .8s steps(1) infinite;
+}
+@keyframes twBlink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.tw-cursor{display:none}}
+
 .hl-screen{
   background:linear-gradient(120deg,var(--sm-cyan),var(--sm-blue));
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -1688,6 +1698,39 @@ addEventListener("pointermove", e=>{
 addEventListener("pointerup", ()=>{ wfDownX = null; wfRow.classList.remove("dragging"); });
 wfRow.addEventListener("click", e=>{ if (wfMoved){ e.stopPropagation(); e.preventDefault(); wfMoved = false; } }, true);
 buildSlider("all");
+
+/* ---------- hero typewriter (Aceternity-style) ---------- */
+let twRun = 0;
+function typewriterHero(){
+  const h1 = document.querySelector(".hero h1");
+  if (!h1 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const run = ++twRun;
+  const spans = [...h1.querySelectorAll("span")];
+  const texts = spans.map(s => s.textContent);
+  h1.style.minHeight = h1.offsetHeight + "px";   /* no layout jump while typing */
+  h1.querySelectorAll(".tw-cursor").forEach(c => c.remove());
+  const cursor = document.createElement("span");
+  cursor.className = "tw-cursor";
+  cursor.setAttribute("aria-hidden", "true");
+  spans.forEach(s => s.textContent = "");
+  spans[0].after(cursor);
+  let si = 0, ci = 0;
+  (function tick(){
+    if (run !== twRun) return;                    /* a newer run took over */
+    if (si >= spans.length){
+      setTimeout(()=>{ if (run === twRun) cursor.remove(); }, 2200);
+      return;
+    }
+    const t = texts[si];
+    if (ci < t.length){
+      spans[si].textContent = t.slice(0, ++ci);
+      spans[si].after(cursor);
+      setTimeout(tick, 55);
+    } else { si++; ci = 0; setTimeout(tick, 120); }
+  })();
+}
+typewriterHero();
+langToggle.addEventListener("click", typewriterHero);
 
 /* ---------- mobile menu ---------- */
 const burger = document.getElementById("burger");
