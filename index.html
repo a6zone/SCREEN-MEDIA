@@ -573,6 +573,31 @@ html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(3
 }
 
 /* ============================================================
+   Video ad — Backlight (Magic UI style ambient glow)
+   ============================================================ */
+.backlight{position:relative;max-width:860px;margin-inline:auto}
+.backlight::before{
+  content:"";position:absolute;inset:-14px;z-index:0;border-radius:32px;
+  background:linear-gradient(120deg,var(--sm-orange),var(--sm-blue),var(--sm-orange-light),var(--sm-navy),var(--sm-orange));
+  background-size:300% 300%;
+  filter:blur(40px);opacity:.65;
+  animation:backlightShift 9s ease-in-out infinite alternate;
+}
+.backlight video{
+  position:relative;z-index:1;display:block;
+  width:100%;aspect-ratio:16/9;object-fit:cover;
+  border-radius:calc(var(--radius) + 4px);
+  background:#000;
+  border:1px solid var(--line-strong);
+}
+@keyframes backlightShift{
+  from{background-position:0% 50%}
+  to{background-position:100% 50%}
+}
+html.light .backlight::before{opacity:.45}
+@media (prefers-reduced-motion:reduce){.backlight::before{animation:none}}
+
+/* ============================================================
    Process — from idea to operation
    ============================================================ */
 .steps{
@@ -1198,6 +1223,20 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
         </button>
         <div class="ws-dots" id="ws-dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ VIDEO AD ============================ -->
+  <section class="section" id="video">
+    <div class="container">
+      <div class="section-head rv" style="text-align:center;margin-inline:auto">
+        <p class="kicker" data-ar="من إنتاجنا" data-en="FROM OUR PRODUCTION">من إنتاجنا</p>
+        <h2 data-ar="إعلان مصوّر من تنفيذ فريقنا" data-en="An ad produced by our team">إعلان مصوّر من تنفيذ فريقنا</h2>
+        <p class="sub" data-ar="نموذج من إنتاجنا الإعلامي — تصوير ومونتاج وإخراج كامل لإعلان تجاري جاهز للنشر." data-en="A sample of our media production — full shooting, editing and direction for a publish-ready commercial.">نموذج من إنتاجنا الإعلامي — تصوير ومونتاج وإخراج كامل لإعلان تجاري جاهز للنشر.</p>
+      </div>
+      <div class="backlight rv">
+        <video src="work experience/Video ad/Video.mp4" controls playsinline preload="metadata"></video>
       </div>
     </div>
   </section>
