@@ -246,6 +246,7 @@ html.light .theme-toggle .icon-moon{display:none}
   opacity:.9;
   filter:drop-shadow(0 18px 40px rgba(36,77,135,.28)) drop-shadow(0 0 30px rgba(242,149,31,.15));
 }
+svg.hero-tri{height:min(26vh,240px);opacity:1;filter:drop-shadow(0 0 46px rgba(242,149,31,.18))}
 .tri-a{top:14%;left:11%;animation:triFloatA 9s ease-in-out infinite}
 .tri-b{top:52%;right:8%;animation:triFloatB 11s ease-in-out infinite}
 @keyframes triFloatA{
@@ -918,8 +919,14 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="hero-grid" aria-hidden="true"></div>
-    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true" onerror="this.remove()">
-    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true" onerror="this.remove()">
+    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true">
+    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true">
+    <template id="tri-fallback">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M28 16 84 50 28 84Z" fill="none" stroke="#4A90C0" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
+        <path d="M38 30 68 50 38 70Z" fill="rgba(242,149,31,.09)" stroke="rgba(242,149,31,.5)" stroke-width=".9" stroke-linejoin="round"/>
+      </svg>
+    </template>
 
     <div class="container hero-inner">
       <p class="kicker" data-ar="للمطاعم · الكافيهات · المحلات التجارية" data-en="FOR RESTAURANTS · CAFÉS · RETAIL STORES">للمطاعم · الكافيهات · المحلات التجارية</p>
@@ -1686,6 +1693,16 @@ addEventListener("pointermove", e=>{
 addEventListener("pointerup", ()=>{ wfDownX = null; wfRow.classList.remove("dragging"); });
 wfRow.addEventListener("click", e=>{ if (wfMoved){ e.stopPropagation(); e.preventDefault(); wfMoved = false; } }, true);
 buildSlider("all");
+
+/* ---------- hero logo fallback: show triangles until icons/logo.png exists ---------- */
+document.querySelectorAll("img.hero-tri").forEach(img=>{
+  img.addEventListener("error", ()=>{
+    const tpl = document.getElementById("tri-fallback");
+    const svg = tpl.content.firstElementChild.cloneNode(true);
+    svg.setAttribute("class", img.className);
+    img.replaceWith(svg);
+  });
+});
 
 /* ---------- hero typewriter (Aceternity-style) ---------- */
 let twRun = 0;
