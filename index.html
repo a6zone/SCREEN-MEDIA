@@ -590,6 +590,42 @@ html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(3
   background:#000;
   border:1px solid var(--line-strong);
 }
+
+/* PixelImage reveal (Magic UI style) — pixel-block assemble + grayscale→color */
+.pixel-video{position:relative}
+.pixel-reveal{
+  position:absolute;inset:0;z-index:2;
+  border-radius:calc(var(--radius) + 4px);overflow:hidden;
+  cursor:pointer;
+  transition:opacity .5s var(--ease);
+}
+.pixel-reveal.played{opacity:0;pointer-events:none}
+.pixel-reveal .px{
+  position:absolute;inset:0;
+  background-image:var(--poster);background-size:cover;background-position:center;
+  opacity:0;filter:grayscale(1);
+  transform:scale(1.04);
+  transition:opacity .55s var(--ease),filter .9s var(--ease),transform .55s var(--ease);
+}
+.pixel-reveal.in .px{opacity:1;filter:grayscale(0);transform:none}
+.pixel-play{
+  position:absolute;inset:0;z-index:3;display:grid;place-items:center;
+  opacity:0;transition:opacity .4s var(--ease) .9s;pointer-events:none;
+}
+.pixel-reveal.in .pixel-play{opacity:1}
+.pixel-play span{
+  width:74px;height:74px;border-radius:50%;
+  background:rgba(10,10,10,.45);border:1.5px solid rgba(255,255,255,.7);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  display:grid;place-items:center;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+  transition:transform .25s var(--ease),background .25s var(--ease);
+}
+.pixel-reveal:hover .pixel-play span{transform:scale(1.08);background:rgba(242,149,31,.85)}
+.pixel-play svg{width:30px;height:30px;fill:#fff;margin-inline-start:4px}
+@media (prefers-reduced-motion:reduce){
+  .pixel-reveal .px{opacity:1;filter:none;transform:none;transition:none}
+}
 @keyframes backlightShift{
   from{background-position:0% 50%}
   to{background-position:100% 50%}
@@ -1202,7 +1238,12 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <p class="sub" data-ar="نموذج من إنتاجنا الإعلامي — تصوير ومونتاج وإخراج كامل لإعلان تجاري جاهز للنشر." data-en="A sample of our media production — full shooting, editing and direction for a publish-ready commercial.">نموذج من إنتاجنا الإعلامي — تصوير ومونتاج وإخراج كامل لإعلان تجاري جاهز للنشر.</p>
       </div>
       <div class="backlight rv">
-        <video src="work experience/Video ad/Video.mp4" controls playsinline preload="metadata"></video>
+        <div class="pixel-video">
+          <video id="ad-video" src="work experience/Video ad/Video.mp4" poster="work experience/Video ad/poster.jpg" controls playsinline preload="metadata"></video>
+          <div class="pixel-reveal" id="pixel-reveal" style="--poster:url('work experience/Video ad/poster.jpg')" aria-label="Play video" role="button" tabindex="0">
+            <div class="pixel-play" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7Z"/></svg></span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1546,6 +1587,38 @@ themeToggle.addEventListener("click", ()=>{
   setTheme(t);
   try{ localStorage.setItem("sm-theme", t); }catch(e){}
 });
+
+/* ---------- video ad: PixelImage reveal (Magic UI style) ---------- */
+(function(){
+  const reveal = document.getElementById("pixel-reveal");
+  const video = document.getElementById("ad-video");
+  if (!reveal || !video) return;
+  const ROWS = 4, COLS = 6;
+  const play = reveal.querySelector(".pixel-play");
+  for (let r = 0; r < ROWS; r++){
+    for (let c = 0; c < COLS; c++){
+      const cell = document.createElement("div");
+      cell.className = "px";
+      const top = (r * 100 / ROWS).toFixed(4);
+      const bottom = ((ROWS - 1 - r) * 100 / ROWS).toFixed(4);
+      const left = (c * 100 / COLS).toFixed(4);
+      const right = ((COLS - 1 - c) * 100 / COLS).toFixed(4);
+      cell.style.clipPath = `inset(${top}% ${right}% ${bottom}% ${left}%)`;
+      cell.style.transitionDelay = (Math.random() * 0.7).toFixed(3) + "s";
+      reveal.insertBefore(cell, play);
+    }
+  }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if (e.isIntersecting){ reveal.classList.add("in"); io.disconnect(); } });
+  }, { threshold: 0.35 });
+  io.observe(reveal);
+  function start(){
+    reveal.classList.add("played");
+    video.play().catch(()=>{});
+  }
+  reveal.addEventListener("click", start);
+  reveal.addEventListener("keydown", e=>{ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); start(); } });
+})();
 
 /* ---------- work portfolio ----------
    EDIT HERE: أضف عملاً جديداً بسطر واحد — ضع الصورة في مجلد
