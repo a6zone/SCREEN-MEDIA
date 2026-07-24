@@ -289,15 +289,18 @@ body.en .kicker{letter-spacing:.06em}
   margin-block:1.1rem .9rem;
   text-wrap:balance;
 }
-/* typewriter cursor (Aceternity-style) */
-.tw-cursor{
-  display:inline-block;width:4px;height:.85em;border-radius:2px;
-  background:var(--sm-orange);margin-inline:3px;vertical-align:-.06em;
-  box-shadow:0 0 12px rgba(242,149,31,.6);
-  animation:twBlink .8s steps(1) infinite;
+/* blur-in-up text animation (Magic UI TextAnimate style) */
+.bi{
+  display:inline-block;white-space:pre;
+  opacity:0;filter:blur(12px);transform:translateY(18px);
+  animation:blurInUp .65s var(--ease) forwards;
 }
-@keyframes twBlink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.tw-cursor{display:none}}
+@keyframes blurInUp{to{opacity:1;filter:blur(0);transform:none}}
+.hl-screen .bi,.hl-street .bi{
+  background:inherit;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+@media (prefers-reduced-motion:reduce){.bi{animation:none;opacity:1;filter:none;transform:none}}
 
 .hl-screen{
   background:linear-gradient(120deg,var(--sm-cyan),var(--sm-blue));
@@ -1704,38 +1707,36 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
   });
 });
 
-/* ---------- hero typewriter (Aceternity-style) ---------- */
-let twRun = 0;
-function typewriterHero(){
+/* ---------- hero blur-in-up (Magic UI TextAnimate style) ----------
+   English animates by character; Arabic by word (splitting Arabic
+   letters into separate elements would break their cursive joining) */
+function blurInHero(){
   const h1 = document.querySelector(".hero h1");
   if (!h1 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const run = ++twRun;
-  const spans = [...h1.querySelectorAll("span")];
-  const texts = spans.map(s => s.textContent);
-  h1.style.minHeight = h1.offsetHeight + "px";   /* no layout jump while typing */
-  h1.querySelectorAll(".tw-cursor").forEach(c => c.remove());
-  const cursor = document.createElement("span");
-  cursor.className = "tw-cursor";
-  cursor.setAttribute("aria-hidden", "true");
-  spans.forEach(s => s.textContent = "");
-  spans[0].after(cursor);
-  let si = 0, ci = 0;
-  (function tick(){
-    if (run !== twRun) return;                    /* a newer run took over */
-    if (si >= spans.length){
-      setTimeout(()=>{ if (run === twRun) cursor.remove(); }, 2200);
-      return;
-    }
-    const t = texts[si];
-    if (ci < t.length){
-      spans[si].textContent = t.slice(0, ++ci);
-      spans[si].after(cursor);
-      setTimeout(tick, 55);
-    } else { si++; ci = 0; setTimeout(tick, 120); }
-  })();
+  let delay = 0;
+  h1.querySelectorAll(":scope > span").forEach(seg=>{
+    const text = seg.textContent;
+    seg.textContent = "";
+    const arabic = /[؀-ۿ]/.test(text);
+    const units = arabic ? text.split(/(\s+)/) : [...text];
+    units.forEach(u=>{
+      if (!u) return;
+      const s = document.createElement("span");
+      s.className = "bi";
+      s.textContent = u;
+      if (/^\s+$/.test(u)){
+        s.style.animation = "none";
+        s.style.opacity = "1"; s.style.filter = "none"; s.style.transform = "none";
+      } else {
+        s.style.animationDelay = delay + "ms";
+        delay += arabic ? 80 : 30;
+      }
+      seg.appendChild(s);
+    });
+  });
 }
-typewriterHero();
-langToggle.addEventListener("click", typewriterHero);
+blurInHero();
+langToggle.addEventListener("click", blurInHero);
 
 /* ---------- mobile menu ---------- */
 const burger = document.getElementById("burger");
