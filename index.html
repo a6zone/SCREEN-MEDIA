@@ -575,7 +575,7 @@ html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(3
 /* ============================================================
    Video ad — Backlight (Magic UI style ambient glow)
    ============================================================ */
-.backlight{position:relative;max-width:860px;margin-inline:auto}
+.backlight{position:relative;max-width:min(400px,86vw);margin-inline:auto}
 .backlight::before{
   content:"";position:absolute;inset:-14px;z-index:0;border-radius:32px;
   background:linear-gradient(120deg,var(--sm-orange),var(--sm-blue),var(--sm-orange-light),var(--sm-navy),var(--sm-orange));
@@ -585,7 +585,7 @@ html.light .ws-nav{background:rgba(255,255,255,.75);box-shadow:0 8px 24px rgba(3
 }
 .backlight video{
   position:relative;z-index:1;display:block;
-  width:100%;aspect-ratio:16/9;object-fit:cover;
+  width:100%;aspect-ratio:9/16;object-fit:cover;
   border-radius:calc(var(--radius) + 4px);
   background:#000;
   border:1px solid var(--line-strong);
