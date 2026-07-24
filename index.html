@@ -664,6 +664,49 @@ html.light .backlight::before{opacity:.45}
 .step p{font-size:.93rem;color:var(--muted)}
 
 /* ============================================================
+   Animated list — HOW WE WORK (Magic UI style)
+   ============================================================ */
+.alist{
+  display:flex;flex-direction:column;gap:.9rem;
+  max-width:470px;margin-inline:auto;
+}
+.anote{
+  display:flex;align-items:center;gap:1rem;
+  border-radius:18px;padding:1.05rem 1.2rem;cursor:default;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 -20px 80px -20px rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(38px) scale(.9);
+  transition:opacity .5s var(--ease),transform .6s cubic-bezier(.22,1.35,.36,1),box-shadow .25s var(--ease);
+  will-change:transform,opacity;
+}
+.anote.show{opacity:1;transform:none}
+.anote.show:hover{transform:scale(1.03)}
+html.light .anote{
+  background:#fff;border-color:transparent;
+  box-shadow:0 0 0 1px rgba(0,0,0,.03),0 2px 4px rgba(0,0,0,.05),0 14px 26px rgba(36,77,135,.1);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+.anote-icon{
+  flex-shrink:0;width:46px;height:46px;border-radius:14px;
+  display:grid;place-items:center;font-size:1.4rem;line-height:1;
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+}
+.anote-body{min-width:0}
+.anote-title{
+  display:flex;align-items:center;gap:.55em;flex-wrap:wrap;
+  font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.4;
+  color:var(--txt);
+}
+.anote-time{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--steel-txt)}
+body.en .anote-time{letter-spacing:.04em}
+.anote-desc{font-size:.9rem;color:var(--muted);line-height:1.6;margin-top:.15rem}
+@media (prefers-reduced-motion:reduce){
+  .anote{opacity:1;transform:none;transition:none}
+}
+
+/* ============================================================
    Opening package — the formula
    ============================================================ */
 .package-panel{
@@ -1291,28 +1334,48 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
         <p class="sub" data-ar="أربع مراحل واضحة، وفريق واحد مسؤول عن كل التفاصيل." data-en="Four clear stages, one team accountable for every detail.">أربع مراحل واضحة، وفريق واحد مسؤول عن كل التفاصيل.</p>
       </div>
 
-      <ol class="steps">
-        <li class="step rv">
-          <span class="step-idx">01</span>
-          <h3 data-ar="الفكرة والاستشارة" data-en="Idea &amp; consultation">الفكرة والاستشارة</h3>
-          <p data-ar="نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة." data-en="We listen to your idea, understand your concept and audience, and scope exactly what it needs.">نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة.</p>
-        </li>
-        <li class="step rv">
-          <span class="step-idx">02</span>
-          <h3 data-ar="الهوية والتصميم" data-en="Identity &amp; design">الهوية والتصميم</h3>
-          <p data-ar="لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك." data-en="Logo, identity, menu and packaging — a complete personality for your brand.">لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك.</p>
-        </li>
-        <li class="step rv">
-          <span class="step-idx">03</span>
-          <h3 data-ar="التنفيذ والطباعة" data-en="Production &amp; printing">التنفيذ والطباعة</h3>
-          <p data-ar="نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل." data-en="We print the boxes and cups, install the signage, and prep every physical detail.">نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل.</p>
-        </li>
-        <li class="step rv">
-          <span class="step-idx">04</span>
-          <h3 data-ar="الإطلاق والتشغيل" data-en="Launch &amp; operation">الإطلاق والتشغيل</h3>
-          <p data-ar="تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها." data-en="Shoots, ads, campaigns and an opening event — and we stay with you after.">تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها.</p>
-        </li>
-      </ol>
+      <div class="alist" id="process-list">
+        <figure class="anote">
+          <div class="anote-icon" style="background:#4A90C0">💡</div>
+          <div class="anote-body">
+            <figcaption class="anote-title">
+              <span data-ar="الفكرة والاستشارة" data-en="Idea &amp; consultation">الفكرة والاستشارة</span>
+              <span class="anote-time" data-ar="المرحلة ٠١" data-en="STAGE 01">المرحلة ٠١</span>
+            </figcaption>
+            <p class="anote-desc" data-ar="نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة." data-en="We listen to your idea, understand your concept and audience, and scope exactly what it needs.">نسمع فكرتك ونفهم مشروعك وجمهوره، ثم نحدد احتياجه بدقة.</p>
+          </div>
+        </figure>
+        <figure class="anote">
+          <div class="anote-icon" style="background:#F2951F">🎨</div>
+          <div class="anote-body">
+            <figcaption class="anote-title">
+              <span data-ar="الهوية والتصميم" data-en="Identity &amp; design">الهوية والتصميم</span>
+              <span class="anote-time" data-ar="المرحلة ٠٢" data-en="STAGE 02">المرحلة ٠٢</span>
+            </figcaption>
+            <p class="anote-desc" data-ar="لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك." data-en="Logo, identity, menu and packaging — a complete personality for your brand.">لوقو وهوية ومنيو وتغليف — شخصية كاملة تميّز مشروعك.</p>
+          </div>
+        </figure>
+        <figure class="anote">
+          <div class="anote-icon" style="background:#244D87">🖨️</div>
+          <div class="anote-body">
+            <figcaption class="anote-title">
+              <span data-ar="التنفيذ والطباعة" data-en="Production &amp; printing">التنفيذ والطباعة</span>
+              <span class="anote-time" data-ar="المرحلة ٠٣" data-en="STAGE 03">المرحلة ٠٣</span>
+            </figcaption>
+            <p class="anote-desc" data-ar="نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل." data-en="We print the boxes and cups, install the signage, and prep every physical detail.">نطبع البوكسات والأكواب، ونركّب اللوحات، ونجهّز كل التفاصيل.</p>
+          </div>
+        </figure>
+        <figure class="anote">
+          <div class="anote-icon" style="background:#1FB57A">🚀</div>
+          <div class="anote-body">
+            <figcaption class="anote-title">
+              <span data-ar="الإطلاق والتشغيل" data-en="Launch &amp; operation">الإطلاق والتشغيل</span>
+              <span class="anote-time" data-ar="المرحلة ٠٤" data-en="STAGE 04">المرحلة ٠٤</span>
+            </figcaption>
+            <p class="anote-desc" data-ar="تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها." data-en="Shoots, ads, campaigns and an opening event — and we stay with you after.">تصوير وإعلانات وحملات وفعالية افتتاح — ونبقى معك بعدها.</p>
+          </div>
+        </figure>
+      </div>
     </div>
   </section>
 
@@ -1587,6 +1650,32 @@ themeToggle.addEventListener("click", ()=>{
   setTheme(t);
   try{ localStorage.setItem("sm-theme", t); }catch(e){}
 });
+
+/* ---------- HOW WE WORK: AnimatedList (Magic UI style) ---------- */
+(function(){
+  const list = document.getElementById("process-list");
+  if (!list) return;
+  const notes = [...list.querySelectorAll(".anote")];
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches){
+    notes.forEach(n => n.classList.add("show"));
+    return;
+  }
+  let timers = [];
+  const clear = ()=>{ timers.forEach(clearTimeout); timers = []; };
+  function cycle(){
+    clear();
+    notes.forEach(n => n.classList.remove("show"));
+    notes.forEach((n, i)=> timers.push(setTimeout(()=> n.classList.add("show"), 220 + i * 700)));
+    timers.push(setTimeout(cycle, 220 + notes.length * 700 + 3400));
+  }
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting) cycle();
+      else { clear(); notes.forEach(n => n.classList.remove("show")); }
+    });
+  }, { threshold: 0.3 });
+  io.observe(list);
+})();
 
 /* ---------- video ad: PixelImage reveal (Magic UI style) ---------- */
 (function(){
