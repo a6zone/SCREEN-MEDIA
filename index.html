@@ -249,33 +249,19 @@ html.light .theme-toggle .icon-moon{display:none}
   -webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
   mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
 }
-/* Text Wave — animated character-field backdrop (ported from the Originkit
-   React component to vanilla). Two brand colours across the field, flipped
-   on its side and faded all the way down for a trippy look. The wave is
-   driven entirely in CSS: a single --t / --speed-factor on the parent
-   cascades (via @property inherits) into every cell's --l opacity. */
-@property --t{syntax:"<integer>";initial-value:0;inherits:true}
-@property --speed-factor{syntax:"<number>";initial-value:1;inherits:true}
-.tw-bg{
-  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-  opacity:.5;
-  transform:scaleX(-1);                       /* flip the side */
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 24%,transparent 90%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 24%,transparent 90%);
+/* Dot Matrix — WebGL (OGL) hero backdrop: a flowing perlin field sampled into
+   a matrix of "SM" glyphs in the brand palette. Rendered by
+   assets/hero-dotmatrix.js into #hero-dot; faded down so the headline stays
+   readable. */
+.hero-dot{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  opacity:.6;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 30%,transparent 92%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 30%,transparent 92%);
 }
-html.light .tw-bg{opacity:.42}
-.tw-grid{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-family:var(--font-mono);font-weight:600;line-height:1;
-}
-.tw-cell{
-  position:absolute;display:flex;align-items:center;justify-content:center;
-  --offset-x:calc(var(--x) - .5);--abs-x:calc(max(var(--offset-x),-1 * var(--offset-x)));
-  --offset-y:calc(var(--y) - .5);--abs-y:calc(max(var(--offset-y),-1 * var(--offset-y)));
-  --l:calc(sin(var(--abs-x) / cos(sin(var(--abs-y) * 2 + 60) * 2.5) * 3 - (var(--t) * var(--speed-factor)) / 350));
-  color:var(--c);opacity:max(var(--l),.05);
-}
-@media (prefers-reduced-motion:reduce){.tw-bg{opacity:.28}}
+.hero-dot canvas{width:100%;height:100%;display:block}
+html.light .hero-dot{opacity:.5}
+@media (prefers-reduced-motion:reduce){.hero-dot{opacity:.4}}
 
 /* two floating brand logos, placed away from the headline */
 .hero-tri{
@@ -1025,7 +1011,7 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
   <!-- ============================ HERO ============================ -->
   <section class="hero">
-    <div class="tw-bg" aria-hidden="true"><div class="tw-grid" id="tw-grid"></div></div>
+    <div class="hero-dot" id="hero-dot" aria-hidden="true"></div>
     <div class="hero-grid" aria-hidden="true"></div>
     <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
     <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
@@ -1878,66 +1864,8 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
   });
 });
 
-/* ---------- Text Wave hero backdrop ---------- */
-(function(){
-  const bg = document.querySelector(".tw-bg");
-  const grid = document.getElementById("tw-grid");
-  if (!bg || !grid) return;
-
-  const FONT = 18, GAP = 24, TILE = FONT + GAP;   // cell size (px) — sparser field = fewer nodes
-  const SPEED = 61, REVERSE = true;               // component defaults
-  const TEXT = "SCREEN MEDIA ";                    // the field's characters
-  const PAL = ["#F2951F", "#4A90C0"];              // two main brand colours
-
-  const hex = h=>{ h = h.replace("#",""); if (h.length===3) h = h.split("").map(c=>c+c).join(""); const n=parseInt(h,16); return {r:(n>>16)&255,g:(n>>8)&255,b:n&255}; };
-  const A = hex(PAL[0]), B = hex(PAL[1]);
-  const mix = t=>`rgb(${Math.round(A.r+(B.r-A.r)*t)},${Math.round(A.g+(B.g-A.g)*t)},${Math.round(A.b+(B.b-A.b)*t)})`;
-
-  function build(){
-    const w = bg.offsetWidth, h = bg.offsetHeight;
-    if (!w || !h) return;
-    let cols = Math.max(1, Math.ceil(w / TILE)); if (cols % 2 === 1) cols++;
-    const rows = Math.max(1, Math.ceil(h / TILE));
-    grid.style.width  = cols * TILE + "px";
-    grid.style.height = rows * TILE + "px";
-    let out = "";
-    const n = cols * rows;
-    for (let i = 0; i < n; i++){
-      const x = (i % cols) * TILE, y = Math.floor(i / cols) * TILE;
-      const xRatio = ((i + 1) % cols) / (cols + 1);
-      const yRatio = (rows - Math.floor(i / cols)) / rows;
-      const t = cols > 1 ? (i % cols) / (cols - 1) : 0;
-      const ch = TEXT[i % TEXT.length].replace(" ", " ");
-      out += '<span class="tw-cell" style="--x:'+xRatio+';--y:'+yRatio+';--c:'+mix(t)+';left:'+x+'px;top:'+y+'px;width:'+TILE+'px;height:'+TILE+'px;font-size:'+FONT+'px">'+ch+'</span>';
-    }
-    grid.innerHTML = out;
-    grid.style.setProperty("--speed-factor", String(SPEED / 25));
-  }
-
-  /* build the ~800-node field off the critical path so the hero (LCP) paints
-     first; requestIdleCallback where available, else a microtask-ish timeout */
-  const defer = window.requestIdleCallback || (fn=>setTimeout(fn, 1));
-  defer(build);
-  let rt; addEventListener("resize", ()=>{ clearTimeout(rt); rt = setTimeout(build, 200); });
-
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  let raf = null, running = false, onScreen = false, t = 0, last = 0;
-  const INTERVAL = 1000 / 30;
-  function tick(ts){
-    if (!last || ts - last >= INTERVAL){
-      t = (t + 10 * (REVERSE ? -1 : 1)) % 864e5;
-      grid.style.setProperty("--t", String(t));
-      last = ts;
-    }
-    raf = requestAnimationFrame(tick);
-  }
-  function start(){ if (running || !onScreen || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(tick); }
-  function stop(){ if (!running) return; running = false; cancelAnimationFrame(raf); }
-  /* animate only while the hero is on screen AND the tab is visible */
-  new IntersectionObserver(es=>{ es.forEach(e=>{ onScreen = e.isIntersecting; onScreen ? start() : stop(); }); }, { threshold: 0 }).observe(bg);
-  document.addEventListener("visibilitychange", ()=>{ document.hidden ? stop() : start(); });
-})();
+/* Dot Matrix hero backdrop is mounted by assets/hero-dotmatrix.js (bundled
+   OGL/WebGL), loaded via a deferred <script> before </body>. */
 
 /* ---------- hero blur-in-up (Magic UI TextAnimate style) ----------
    English animates by character; Arabic by word (splitting Arabic
@@ -2045,5 +1973,7 @@ track.innerHTML += track.innerHTML;
 /* ---------- year ---------- */
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+<!-- Dot Matrix hero backdrop — bundled OGL/WebGL (no runtime CDN) -->
+<script defer src="assets/hero-dotmatrix.js"></script>
 </body>
 </html>
