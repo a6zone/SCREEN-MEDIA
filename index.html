@@ -26,7 +26,13 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Fonts loaded non-render-blocking: fetch as print, flip to all on load
+     (display=swap already paints fallback text immediately) -->
+<link id="gfonts" rel="stylesheet" media="print" onload="this.media='all'"
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script>addEventListener("load",function(){var g=document.getElementById("gfonts");if(g&&g.media!=="all")g.media="all";});</script>
+<noscript><link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
 <style>
 /* ============================================================
    SCREEN MEDIA — brand tokens (from brand/palette.css)
@@ -267,7 +273,7 @@ html.light .tw-bg{opacity:.42}
   --offset-x:calc(var(--x) - .5);--abs-x:calc(max(var(--offset-x),-1 * var(--offset-x)));
   --offset-y:calc(var(--y) - .5);--abs-y:calc(max(var(--offset-y),-1 * var(--offset-y)));
   --l:calc(sin(var(--abs-x) / cos(sin(var(--abs-y) * 2 + 60) * 2.5) * 3 - (var(--t) * var(--speed-factor)) / 350));
-  color:var(--c);opacity:max(var(--l),.05);will-change:opacity;
+  color:var(--c);opacity:max(var(--l),.05);
 }
 @media (prefers-reduced-motion:reduce){.tw-bg{opacity:.28}}
 
@@ -405,6 +411,10 @@ body.en .kicker{letter-spacing:.06em}
    Sections — shared
    ============================================================ */
 .section{padding-block:clamp(4.2rem,9vw,7rem)}
+/* Perf: skip layout/paint for off-screen sections until they scroll near.
+   `auto` intrinsic size remembers each section's rendered height, so the
+   scrollbar stays stable and in-page anchors land correctly. */
+.section,.site-footer{content-visibility:auto;contain-intrinsic-size:auto 640px}
 .section-head{max-width:640px;margin-bottom:clamp(2.4rem,5vw,3.6rem)}
 .section-head h2{
   font-family:var(--font-display);font-weight:700;
@@ -1017,8 +1027,8 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
   <section class="hero">
     <div class="tw-bg" aria-hidden="true"><div class="tw-grid" id="tw-grid"></div></div>
     <div class="hero-grid" aria-hidden="true"></div>
-    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true">
-    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true">
+    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
+    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
     <template id="tri-fallback">
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <path d="M28 16 84 50 28 84Z" fill="none" stroke="#4A90C0" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
@@ -1509,12 +1519,12 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
     <div class="footer-reg">
       <span class="reg-item">
-        <img src="government/Ministry-of-Commerce-01.png" alt="Ministry of Commerce" loading="lazy">
+        <img src="government/Ministry-of-Commerce-01.png" alt="Ministry of Commerce" loading="lazy" decoding="async">
         <span data-ar="السجل التجاري" data-en="Commercial Registration (CR)">السجل التجاري</span>
         <b class="mono" dir="ltr">7053652041</b>
       </span>
       <span class="reg-item">
-        <img src="government/VAT.png" alt="VAT" loading="lazy">
+        <img src="government/VAT.png" alt="VAT" loading="lazy" decoding="async">
         <span data-ar="الرقم الضريبي" data-en="VAT Number">الرقم الضريبي</span>
         <b class="mono" dir="ltr">314629055200003</b>
       </span>
@@ -1769,7 +1779,7 @@ function buildSlider(cat){
       const cc = WORK_CATS[c];
       const fig = document.createElement("figure");
       fig.className = "ws-slide";
-      fig.innerHTML = '<img loading="lazy"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
+      fig.innerHTML = '<img loading="lazy" decoding="async"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
       const img = fig.querySelector("img");
       img.src = src; img.alt = cc.en;
       const gi = wsTrack.children.length;
@@ -1874,7 +1884,7 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
   const grid = document.getElementById("tw-grid");
   if (!bg || !grid) return;
 
-  const FONT = 18, GAP = 16, TILE = FONT + GAP;   // cell size (px)
+  const FONT = 18, GAP = 24, TILE = FONT + GAP;   // cell size (px) — sparser field = fewer nodes
   const SPEED = 61, REVERSE = true;               // component defaults
   const TEXT = "SCREEN MEDIA ";                    // the field's characters
   const PAL = ["#F2951F", "#4A90C0"];              // two main brand colours
@@ -1904,12 +1914,15 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
     grid.style.setProperty("--speed-factor", String(SPEED / 25));
   }
 
-  build();
+  /* build the ~800-node field off the critical path so the hero (LCP) paints
+     first; requestIdleCallback where available, else a microtask-ish timeout */
+  const defer = window.requestIdleCallback || (fn=>setTimeout(fn, 1));
+  defer(build);
   let rt; addEventListener("resize", ()=>{ clearTimeout(rt); rt = setTimeout(build, 200); });
 
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  let raf = null, running = false, t = 0, last = 0;
+  let raf = null, running = false, onScreen = false, t = 0, last = 0;
   const INTERVAL = 1000 / 30;
   function tick(ts){
     if (!last || ts - last >= INTERVAL){
@@ -1919,13 +1932,11 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
     }
     raf = requestAnimationFrame(tick);
   }
-  /* only animate while the hero is on screen */
-  new IntersectionObserver(es=>{
-    es.forEach(e=>{
-      if (e.isIntersecting && !running){ running = true; last = 0; raf = requestAnimationFrame(tick); }
-      else if (!e.isIntersecting && running){ running = false; cancelAnimationFrame(raf); }
-    });
-  }, { threshold: 0 }).observe(bg);
+  function start(){ if (running || !onScreen || document.hidden) return; running = true; last = 0; raf = requestAnimationFrame(tick); }
+  function stop(){ if (!running) return; running = false; cancelAnimationFrame(raf); }
+  /* animate only while the hero is on screen AND the tab is visible */
+  new IntersectionObserver(es=>{ es.forEach(e=>{ onScreen = e.isIntersecting; onScreen ? start() : stop(); }); }, { threshold: 0 }).observe(bg);
+  document.addEventListener("visibilitychange", ()=>{ document.hidden ? stop() : start(); });
 })();
 
 /* ---------- hero blur-in-up (Magic UI TextAnimate style) ----------
