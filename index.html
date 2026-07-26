@@ -26,7 +26,13 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Fonts loaded non-render-blocking: fetch as print, flip to all on load
+     (display=swap already paints fallback text immediately) -->
+<link id="gfonts" rel="stylesheet" media="print" onload="this.media='all'"
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script>addEventListener("load",function(){var g=document.getElementById("gfonts");if(g&&g.media!=="all")g.media="all";});</script>
+<noscript><link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Changa:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"></noscript>
 <style>
 /* ============================================================
    SCREEN MEDIA — brand tokens (from brand/palette.css)
@@ -174,12 +180,18 @@ body.en .lang-toggle{letter-spacing:0} /* shows "عربي" in EN mode */
 .theme-toggle .icon-sun{display:none}
 html.light .theme-toggle .icon-sun{display:block}
 html.light .theme-toggle .icon-moon{display:none}
+<<<<<<< HEAD
 .theme-toggle svg{transition:transform .4s var(--ease)}
 .theme-toggle:hover svg{transform:rotate(35deg)}
 /* View Transitions: let the JS circular clip-path own the reveal */
 ::view-transition-old(root),::view-transition-new(root){
   animation:none;mix-blend-mode:normal;
 }
+=======
+/* AnimatedThemeToggler — View Transitions circular reveal on theme switch.
+   Kill the default root cross-fade so only our expanding clip-path shows. */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+>>>>>>> 78923e701e5b32605274dc49bcfd26ff3fbcc04f
 ::view-transition-new(root){z-index:1}
 ::view-transition-old(root){z-index:0}
 
@@ -246,6 +258,20 @@ html.light .theme-toggle .icon-moon{display:none}
   -webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
   mask-image:radial-gradient(60% 55% at 50% 45%,#000 30%,transparent 100%);
 }
+/* Dot Matrix — WebGL (OGL) hero backdrop: a flowing perlin field sampled into
+   a matrix of "SM" glyphs in the brand palette. Rendered by
+   assets/hero-dotmatrix.js into #hero-dot; faded down so the headline stays
+   readable. */
+.hero-dot{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  opacity:.6;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 30%,transparent 92%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 30%,transparent 92%);
+}
+.hero-dot canvas{width:100%;height:100%;display:block}
+html.light .hero-dot{opacity:.5}
+@media (prefers-reduced-motion:reduce){.hero-dot{opacity:.4}}
+
 /* two floating brand logos, placed away from the headline */
 .hero-tri{
   position:absolute;
@@ -380,6 +406,10 @@ body.en .kicker{letter-spacing:.06em}
    Sections — shared
    ============================================================ */
 .section{padding-block:clamp(4.2rem,9vw,7rem)}
+/* Perf: skip layout/paint for off-screen sections until they scroll near.
+   `auto` intrinsic size remembers each section's rendered height, so the
+   scrollbar stays stable and in-page anchors land correctly. */
+.section,.site-footer{content-visibility:auto;contain-intrinsic-size:auto 640px}
 .section-head{max-width:640px;margin-bottom:clamp(2.4rem,5vw,3.6rem)}
 .section-head h2{
   font-family:var(--font-display);font-weight:700;
@@ -990,9 +1020,10 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
   <!-- ============================ HERO ============================ -->
   <section class="hero">
+    <div class="hero-dot" id="hero-dot" aria-hidden="true"></div>
     <div class="hero-grid" aria-hidden="true"></div>
-    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true">
-    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true">
+    <img class="hero-tri tri-a" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
+    <img class="hero-tri tri-b" src="icons/logo.png" alt="" aria-hidden="true" decoding="async" fetchpriority="low">
     <template id="tri-fallback">
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <path d="M28 16 84 50 28 84Z" fill="none" stroke="#4A90C0" stroke-width="1.1" stroke-linejoin="round" opacity=".5"/>
@@ -1483,12 +1514,12 @@ html.light .footer-bottom .mono{color:rgba(36,77,135,.5)}
 
     <div class="footer-reg">
       <span class="reg-item">
-        <img src="government/Ministry-of-Commerce-01.png" alt="Ministry of Commerce" loading="lazy">
+        <img src="government/Ministry-of-Commerce-01.png" alt="Ministry of Commerce" loading="lazy" decoding="async">
         <span data-ar="السجل التجاري" data-en="Commercial Registration (CR)">السجل التجاري</span>
         <b class="mono" dir="ltr">7053652041</b>
       </span>
       <span class="reg-item">
-        <img src="government/VAT.png" alt="VAT" loading="lazy">
+        <img src="government/VAT.png" alt="VAT" loading="lazy" decoding="async">
         <span data-ar="الرقم الضريبي" data-en="VAT Number">الرقم الضريبي</span>
         <b class="mono" dir="ltr">314629055200003</b>
       </span>
@@ -1590,6 +1621,7 @@ function setTheme(t){
   themeToggle.setAttribute("aria-pressed", t === "light");
 }
 setTheme(html.classList.contains("light") ? "light" : "dark");
+<<<<<<< HEAD
 
 /* Magic UI AnimatedThemeToggler — circular reveal via View Transitions */
 function applyThemeToggle(){
@@ -1612,6 +1644,28 @@ themeToggle.addEventListener("click", async ()=>{
     { duration: 620, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" }
   );
 });
+=======
+/* AnimatedThemeToggler (Magic UI): switch the theme inside a View Transition
+   and expand a clip-path circle from the button, so the new theme wipes in
+   radially. Falls back to an instant switch where the API is unavailable or
+   reduced motion is requested. */
+async function switchTheme(){
+  const t = html.classList.contains("light") ? "dark" : "light";
+  const apply = ()=>{ setTheme(t); try{ localStorage.setItem("sm-theme", t); }catch(e){} };
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (typeof document.startViewTransition !== "function" || reduce){ apply(); return; }
+
+  await document.startViewTransition(apply).ready;
+  const { top, left, width, height } = themeToggle.getBoundingClientRect();
+  const x = left + width / 2, y = top + height / 2;
+  const maxRad = Math.hypot(Math.max(left, innerWidth - left), Math.max(top, innerHeight - top));
+  document.documentElement.animate(
+    { clipPath: [ `circle(0px at ${x}px ${y}px)`, `circle(${maxRad}px at ${x}px ${y}px)` ] },
+    { duration: 650, easing: "cubic-bezier(.22,.61,.36,1)", pseudoElement: "::view-transition-new(root)" }
+  );
+}
+themeToggle.addEventListener("click", switchTheme);
+>>>>>>> 78923e701e5b32605274dc49bcfd26ff3fbcc04f
 
 /* ---------- video ad: PixelImage reveal (Magic UI style) ---------- */
 (function(){
@@ -1745,7 +1799,7 @@ function buildSlider(cat){
       const cc = WORK_CATS[c];
       const fig = document.createElement("figure");
       fig.className = "ws-slide";
-      fig.innerHTML = '<img loading="lazy"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
+      fig.innerHTML = '<img loading="lazy" decoding="async"><figcaption class="ws-cat" data-ar="' + cc.ar + '" data-en="' + cc.en + '">' + cc[lang] + '</figcaption>';
       const img = fig.querySelector("img");
       img.src = src; img.alt = cc.en;
       const gi = wsTrack.children.length;
@@ -1843,6 +1897,9 @@ document.querySelectorAll("img.hero-tri").forEach(img=>{
     img.replaceWith(svg);
   });
 });
+
+/* Dot Matrix hero backdrop is mounted by assets/hero-dotmatrix.js (bundled
+   OGL/WebGL), loaded via a deferred <script> before </body>. */
 
 /* ---------- hero blur-in-up (Magic UI TextAnimate style) ----------
    English animates by character; Arabic by word (splitting Arabic
@@ -1950,5 +2007,7 @@ track.innerHTML += track.innerHTML;
 /* ---------- year ---------- */
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+<!-- Dot Matrix hero backdrop — bundled OGL/WebGL (no runtime CDN) -->
+<script defer src="assets/hero-dotmatrix.js"></script>
 </body>
 </html>
